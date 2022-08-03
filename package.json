@@ -1,0 +1,19 @@
+{
+  "name": "popbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "popbot.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyletcooper/popbot.git"
+  },
+  "author": "Web Results Direct",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyletcooper/popbot/issues"
+  },
+  "homepage": "https://github.com/kyletcooper/popbot#readme"
+}
