@@ -1,0 +1,65 @@
+.block-editor-post-preview__button-toggle,
+.editor-post-preview,
+.editor-post-publish-button__button,
+.editor-post-save-draft{
+    display: none !important;
+}
+
+.editor-post-publish-button{
+    display: none;
+}
+
+.editor-post-switch-to-draft{
+    display: none;
+}
+
+.edit-post-sidebar__panel-tab[data-label="PopBot"]{
+    display: none;
+}
+
+.edit-post-meta-boxes-area{
+    display: none;
+}
+
+.edit-post-post-status{
+    display: none;
+}
+
+.edit-post-last-revision__panel{
+    display: none;
+}
+
+.editor-post-title__input{
+    display: none;
+}
+
+.edit-post-visual-editor__post-title-wrapper{
+    display: none;
+}
+
+.edit-post-fullscreen-mode-close{
+    display: none !important;
+}
+
+.components-snackbar{
+    display: none !important;
+}
+
+#wpadminbar{
+    display: none;
+}
+
+#wpbody{
+    padding-top: 0px !important;
+}
+
+.interface-interface-skeleton{
+    top: 0px;
+}
+
+.editor-styles-wrapper{
+    padding: 1.5rem;
+    padding-top: 0.5rem;
+
+    background: #f8fafc !important;
+}
