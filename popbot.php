@@ -4,7 +4,6 @@ namespace popbot;
 
 /**
  * Plugin Name:       PopBot
- * Plugin URI:        https://wrd.studio.com/
  * Description:       Convert your users with targeted pop-ups. Use triggers & rules to nudge your users towards conversions when they're ready using the perfect pop-up.
  * Version:           1.0.0
  * Requires at least: 5.2
