@@ -836,9 +836,10 @@ class popbotPlugin
      */
     static function onActivation(): void
     {
-        wp_mkdir_p(self::TEMPLATES_UPLOADS_DIR);
-
+        require_once popbotPlugin::PLUGIN_DIR . '/src/analytics.class.php';
         analytics::createTable();
+
+        // wp_mkdir_p(self::TEMPLATES_UPLOADS_DIR);
 
         static::setOption("popbot_version", self::VERSION);
     }
@@ -850,6 +851,7 @@ class popbotPlugin
      */
     static function onUninstall(): void
     {
+        require_once popbotPlugin::PLUGIN_DIR . '/src/analytics.class.php';
         analytics::dropTable();
 
         foreach (popBotPlugin::OPTIONS_WHITELIST as $key => $default) {
