@@ -1,0 +1,10 @@
+{
+    "name": "Welcome Mat",
+    "version": "1.0",
+    "category": "Generic",
+    "position": "Fullscreen",
+    "author": "Web Results Direct",
+    "author_uri": "www.webresultsdirect.com",
+    "license": "GNU General Public License v2 or later",
+    "license_uri": "http://www.gnu.org/licenses/gpl-2.0.html"
+}

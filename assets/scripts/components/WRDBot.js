@@ -20,42 +20,53 @@ export class WRDBot extends LitElement {
         }
     }
 
+    _getVisibilityIcon(visibility) {
+        if (visibility == "public") {
+            return "public";
+        }
+        else if (visibility == "private") {
+            return "lock";
+        }
+        else {
+            return "visibility_off";
+        }
+    }
+
+    get trigger() {
+        return window.popbot.triggers.find(trigger => trigger.id == this.bot?.trigger?.trigger);
+    }
+
 
 
     // STYLE
 
     static styles = css`
+        *{
+            box-sizing: border-box;
+        }
         .container{
-            width: 20rem;
+            
             
             background: white;
 
             padding: 1rem;
+            padding-bottom: 0.5rem;
             border-radius: 0.375rem;
             box-shadow: 0 10px 15px -3px rgb(254 206 246 / 0.3), 0 4px 6px -4px rgb(254 206 246 / 0.3);
         }
 
+        .preview_wrapper{
+            position: relative;
+        }
         .preview{
-            height: 14rem;
+            min-height: 14rem;
         }
 
         .header{
+            margin-top: 0.5rem;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
-
-            margin-top: 1rem;
-        }
-
-        .dot{
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 2rem;
-
-            background: #f43f5e;
-        }
-        .dot.enabled{
-            background: #10b981;
         }
 
         .link{
@@ -67,10 +78,44 @@ export class WRDBot extends LitElement {
             text-overflow: ellipsis;
             white-space: nowrap;
             text-decoration: none;
+            min-height: 28px;
+        }
+        .link:hover,
+        .link:focus{
+            color: #D204B0;
         }
 
-        .icon{
-            margin-left: auto;
+        .trigger{
+            --bg: #C60295;
+
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+            padding: 0 0.5rem 0rem 0.25rem;
+
+            background: var(--bg);
+            
+            color: #fff;
+            font-size: 0.75rem;
+
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1;
+
+            border-radius: 100vw;
+            box-shadow: 0.3rem 0.3rem 0.6rem rgba(0, 0, 0, 0.15);
+        }
+        .trigger wrd-icon{
+            --size: 26px;
+            --fill: currentColor;
+        }
+
+        .dropdown{
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 0.5rem;
         }
     `;
 
@@ -81,24 +126,31 @@ export class WRDBot extends LitElement {
     render() {
         return html`
             <article class="container">
-
-                <div class="preview">
-                    <wrd-bot-preview post="${this.post_id}" scale="0.5"></wrd-bot-preview>
+                <div class="preview_wrapper">
+                    <wrd-bot-preview class="preview" post="${this.post_id}" scale="0.5"></wrd-bot-preview>
+                    ${this.renderTrigger()}
                 </div>
 
                 <header class="header">
-                    <div class="dot ${this.bot?.enabled ? "enabled" : "disabled"}" title="${this.bot?.enabled ? "Enabled" : "Disabled"}"></div>
-
-
                     <a href="${this.bot?.edit_link}" class="link">
                         ${this.bot?.title}
                     </a>
 
-
-                    <wrd-icon icon="more_vert" button class="icon"></wrd-icon>
+                    <wrd-icon icon="${this._getVisibilityIcon(this.bot?.visibility.visibility)}" style="--fill: #94a3b8"></wrd-icon>
                 </header>
             </article>
             `;
+    }
+
+    renderTrigger() {
+        if (!this.trigger) return null;
+
+        return html`
+            <div class="trigger" style="--bg: ${this.trigger.color}">
+                <wrd-icon icon="${this.trigger.icon}"></wrd-icon>
+                ${this.trigger.label}
+            </div>
+        `;
     }
 }
 

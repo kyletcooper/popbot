@@ -5,12 +5,14 @@ export class WRDBotPreview extends LitElement {
         post: { type: Number },
         errors: { state: true },
         scale: { type: Number },
-        showErrors: { attribute: "show-errors", type: Boolean }
+        showControls: { attribute: "show-controls", type: Boolean },
+        showErrors: { attribute: "show-errors", type: Boolean },
     };
 
     constructor() {
         super();
 
+        this.showControls = false;
         this.showErrors = false;
         this.scale = 1;
         this.post = -1;
@@ -32,10 +34,18 @@ export class WRDBotPreview extends LitElement {
         e.target.classList.remove("loading");
     }
 
+    _getURL(scale = this.scale) {
+        return `${window.popbot.wp.home_url}/popBotPreview?post=${this.post}&scale=${scale}`;
+    }
+
     refreshPreview() {
         let preview = this.renderRoot.querySelector("iframe");
         preview.classList.add("loading");
         preview.contentWindow.location.reload();
+    }
+
+    openInNewTab() {
+        window.open(this._getURL(1), '_blank').focus();
     }
 
     async refreshErrors() {
@@ -66,6 +76,16 @@ export class WRDBotPreview extends LitElement {
             box-sizing: border-box;
         }
 
+        :host{
+            display: block;
+        }
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            min-height: inherit;
+        }
+
         .iframeWrapper{
             position: relative;
 
@@ -73,15 +93,16 @@ export class WRDBotPreview extends LitElement {
 
             overflow: hidden;
 
-            padding: 1rem;
-
             height: 100%;
+            flex-grow: 1;
 
             border-radius: 0.25rem;
         }
 
         .iframe{
             display: block;
+            position: absolute;
+            inset: 0.5rem;
 
             border: none;
             padding: 0;
@@ -89,8 +110,8 @@ export class WRDBotPreview extends LitElement {
 
             pointer-events: none;
 
-            width: 100%;
-            height: 100%;
+            width: calc(100% - 1rem);
+            height: calc(100% - 1rem);
         }
 
         .iframeLoader {
@@ -127,6 +148,18 @@ export class WRDBotPreview extends LitElement {
               transform: rotate(360deg);
             }
         }
+
+        .controls{
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+
+            display: flex;
+            gap: 0.5rem;
+        }
+        .controls wrd-icon{
+            --size: 32px;
+        }
         
         .ol{
             list-style: none;
@@ -149,21 +182,27 @@ export class WRDBotPreview extends LitElement {
 
     render() {
         return html`
-            <div class="iframeWrapper">
-                <iframe loading="eager" src="${window.popbot.wp.home_url}/popBotPreview?post=${this.post}&scale=${this.scale}" class="iframe loading" @load="${this._onLoad}"></iframe>
-                <div class="iframeLoader"></div>
-            </div>
+            <div class="container">
+                <div class="iframeWrapper">
+                    <iframe loading="eager" src="${this._getURL()}" class="iframe loading" @load="${this._onLoad}"></iframe>
+                    <div class="iframeLoader"></div>
+                    <div class="controls">
+                        <wrd-icon button icon="refresh" @click="${this.refreshPreview}"></wrd-icon>
+                        <wrd-icon button icon="open_in_new" @click="${this.openInNewTab}"></wrd-icon>
+                    </div>
+                </div>
 
-            ${this.showErrors ? html`
-            <ol class="ol">
-                ${this.errors.map(error => {
+                ${this.showErrors ? html`
+                <ol class="ol">
+                    ${this.errors.map(error => {
             return html`
-                        <li class="li">
-                            <wrd-icon icon="error" style="--size: 35px; --fill: #f43f5e"></wrd-icon>
-                            ${error}
-                        </li>`
+                            <li class="li">
+                                <wrd-icon icon="error" style="--size: 35px; --fill: #f43f5e"></wrd-icon>
+                                ${error}
+                            </li>`
         })}
-            </ol>` : null}
+                </ol>` : null}
+            </div>
             `;
     }
 }

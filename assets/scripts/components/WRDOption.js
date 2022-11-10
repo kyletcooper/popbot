@@ -15,17 +15,22 @@ export class WRDOptional extends LitElement {
         this._loading = false;
     }
 
-    _onChange(e) {
+    async _onChange(e) {
         this._loading = true;
+        
+        const response = await window.popbot.manager.fetch.send("popbotUpdateOption", {
+            name: this.name,
+            value: e.detail.value
+        });
 
-        setTimeout(() => {
-            this._loading = false;
+        this._loading = false;
+        
+        if(response.success){
             this.renderRoot.querySelector(".spinner").succeed();
-        }, 1000);
-    }
-
-    async save() {
-
+        }
+        else{
+            this.renderRoot.querySelector(".spinner").fail();
+        }
     }
 
 

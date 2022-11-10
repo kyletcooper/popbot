@@ -30,9 +30,10 @@ export class WRDAppearancePanel extends WRDPanelInterface {
         choice.then(selection => {
             // If we have selected an item
             if (selection.length > 0) {
+                this.value = selection[0];
                 this.requestUpdate('value');
             }
-        }).catch(() => { })
+        }).catch(() => { });
     }
 
     async save() {
@@ -41,12 +42,20 @@ export class WRDAppearancePanel extends WRDPanelInterface {
         super.save();
     }
 
-    _openSettings() {
-        this.renderRoot.querySelector("#templateSettingsPanel")?.openPanel();
-    }
-
     _onLoad(e) {
         this._iframeLoading = false;
+    }
+
+    _getEditorURL(panelMode) {
+        let url = `${window.popbot.wp.admin_url}post.php?post=${window.popbot.wp.post_id}&action=edit`;
+
+        if (panelMode) url += '&panelmode=true';
+
+        return url;
+    }
+
+    _openInFullEditor() {
+        window.open(this._getEditorURL(false), '_blank').focus();
     }
 
 
@@ -128,12 +137,10 @@ export class WRDAppearancePanel extends WRDPanelInterface {
     render() {
         return html`
             <wrd-panel id="panel" header="Customise Appearance">
-
-                <wrd-template-settings-panel id="templateSettingsPanel"></wrd-template-settings-panel>
                 
                 <div class="container">
                     <wrd-select-panel id="changeTemplatePanel" max="1" header="Choose a Template">
-                        ${repeat(window.popbot.templates, (template) => template.part_name, (template) => html`<wrd-part-preview key="${template.part_name}" part="${template.part_name}" name="${template.details.name}"></wrd-part-preview>`)}
+                        ${repeat(window.popbot.templates, (template) => template.slug, (template) => html`<wrd-part-preview key="${template.slug}" part="${template.slug}" name="${template.details.name}" image="${template.image}"></wrd-part-preview>`)}
                     </wrd-select-panel>
 
                     <div class="loading" ?hidden="${!this._iframeLoading}">
@@ -141,14 +148,13 @@ export class WRDAppearancePanel extends WRDPanelInterface {
                         Loading...
                     </div>
 
-                    <iframe class="editor" @load="${this._onLoad}" src="${`${window.popbot.wp.admin_url}post.php?post=${window.popbot.wp.post_id}&action=edit`}"></iframe>
+                    <iframe class="editor" @load="${this._onLoad}" src="${this._getEditorURL(true)}"></iframe>
                 </div >
 
 
                 <div slot="options" class="options">
-                    <wrd-button @click="${this._chooseTemplate}" secondary > Change Template</wrd-button>
-                    
-                    <wrd-icon icon="settings" button @click="${this._openSettings}"></wrd-icon>
+                    <wrd-button @click="${this._chooseTemplate}" secondary>Change Template</wrd-button>
+                    <wrd-tooltip label="Open in Full Editor"><wrd-icon icon="open_in_new" button @click="${this._openInFullEditor}"></wrd-icon></wrd-tooltip>
                 
                     <wrd-button id="button" @click="${this.save}">Save Changes</wrd-button>
                 </div>

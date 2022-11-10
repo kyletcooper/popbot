@@ -57,6 +57,8 @@ export class WRDCondition extends LitElement {
         value: {
             relect: true,
         },
+
+        interval: { type: String, state: true },
     };
 
     _onUpdateValue(property) {
@@ -64,6 +66,16 @@ export class WRDCondition extends LitElement {
         if (!input) return;
 
         this[property] = input.value;
+
+        if (property == "condition") {
+            let condition = window.popbot.conditions.find(cond => cond.id == this.condition);
+
+            if (condition.options && !condition.options.find(opt => opt.id == this.value)) {
+                // This has options and what we have isn't one of them
+                this.value = condition.options[0].id;
+            }
+        }
+
         this.requestUpdate();
 
         const event = new CustomEvent('wrd-condition-change', {
@@ -129,9 +141,10 @@ export class WRDCondition extends LitElement {
 
     render() {
         let categorisedConditions = categorise(window.popbot.conditions, "category");
+        let condition = window.popbot.conditions.find(cond => cond.id == this.condition);
 
         return html`
-            <select name="condition" @input="${() => { this._onUpdateValue("condition") }}">
+            <select name="condition" @input="${() => { this._onUpdateValue("condition") }}" @focus="${e => this.requestUpdate()}">
                 ${renderOptGroups(categorisedConditions, this.condition)}
             </select>
 
@@ -139,7 +152,13 @@ export class WRDCondition extends LitElement {
                 ${renderOptions(window.popbot.comparisons, this.comparison)}
             </select>
 
-            <input name="value" @input="${() => { this._onUpdateValue("value") }}" .value="${this.value}" placeholder="Value" />
+            ${condition?.options ?
+                html`<select name="value" @input="${() => { this._onUpdateValue("value") }}" .value="${this.value}">
+                ${renderOptions(condition?.options, this.value)}
+                </select>`
+                :
+                html`<input name="value" @input="${() => { this._onUpdateValue("value") }}" .value="${this.value}" placeholder="Value" />`
+            }
         `;
     }
 }

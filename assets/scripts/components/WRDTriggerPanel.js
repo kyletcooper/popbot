@@ -85,7 +85,8 @@ export class WRDTriggerPanel extends WRDPanelInterface {
 
         var defaultOption = {
             type: "text",
-            default: "",
+            value: "",
+            placeholder: "",
             label: "Option",
             name: "trigger_threshold"
         }
@@ -94,10 +95,10 @@ export class WRDTriggerPanel extends WRDPanelInterface {
             option = { ...defaultOption, ...option };
 
             if (this.threshold) {
-                option.default = this.threshold;
+                option.value = this.threshold;
             }
 
-            return html`<wrd-input name="${option.name}" value="${option.default}" type="${option.type}" label="${option.label}" hide-errors></wrd-input>`;
+            return html`<wrd-input name="${option.name}" value="${option.value}" placeholder="${option.placeholder}" type="${option.type}" label="${option.label}" hide-errors></wrd-input>`;
         });
     }
 
@@ -174,6 +175,7 @@ export class WRDTriggerPanel extends WRDPanelInterface {
         .trigger wrd-icon{
             --fill: #fff;
             --bg: inherit;
+            --gap: 1rem;
 
             font-weight: 500;
         }
@@ -201,7 +203,7 @@ export class WRDTriggerPanel extends WRDPanelInterface {
             <wrd-panel id="panel" header="Choose a Trigger">
 
                 <p class="info">
-                    When a trigger fires the PopBot will be displayed, so long as all conditions are met. PopBots with the same trigger are fired in order of priority. <a href="#">Learn more about Triggers</a>.
+                    When a trigger fires the PopBot will be displayed, so long as all conditions are met.
                 </p>
 
 

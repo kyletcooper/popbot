@@ -5,6 +5,7 @@ export class WRDInput extends LitElement {
         label: {},
 
         required: { type: Boolean },
+        readonly: { type: Boolean },
         range: {},
 
         hideErrors: {
@@ -21,6 +22,9 @@ export class WRDInput extends LitElement {
         },
         _name: {
             attribute: 'name'
+        },
+        _placeholder: {
+            attribute: 'placeholder'
         },
     };
 
@@ -89,7 +93,7 @@ export class WRDInput extends LitElement {
     }
 
     _checkValidity() {
-        if (!this._input.willValidate) {
+        if (!this._input.willValidate && this._input.validationMessage) {
             this._internals.setValidity({ customError: true }, this._input.validationMessage);
             return false;
         }
@@ -101,6 +105,13 @@ export class WRDInput extends LitElement {
 
         this._internals.setValidity({});
         return true;
+    }
+
+    _onKeyDown(e) {
+        if (e.key == "Tab" && this.type == "code" && e.shiftKey) {
+            e.preventDefault();
+            e.target.setRangeText('\t', e.target.selectionStart, e.target.selectionStart, 'end')
+        }
     }
 
     _onInput() {
@@ -136,6 +147,14 @@ export class WRDInput extends LitElement {
         this._input.focus();
     }
 
+    _copyToClipboard() {
+        navigator.clipboard.writeText(this.value).then(
+            () => {
+                window.WRDToast("Copied to clipboard");
+            },
+        );
+    }
+
 
 
     // STYLE
@@ -162,6 +181,12 @@ export class WRDInput extends LitElement {
             outline: 0.35rem solid #FECEF6;
         }
 
+        .input-inline{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         .input{
             border: none;
             padding: 0px;
@@ -174,12 +199,19 @@ export class WRDInput extends LitElement {
             font-family: inherit;
 
             padding: 0.5rem 0.75rem;
+            flex-grow: 1;
         }
         .input::placeholder{
             color: transparent;
         }
+        .input.hasPlaceholder::placeholder{
+            color: #CBD5E1;
+        }
         .input:focus{
             outline: none;
+        }
+        textarea.input{
+            min-height: 8em;
         }
 
         .label{
@@ -226,9 +258,29 @@ export class WRDInput extends LitElement {
     // MARKUP
 
     render() {
+        if (this.type == "textarea" || this.type == "code") return this.renderTextarea();
+
         return html`
             <label class="container">
-                <input id="input" class="input" type="${this.type}" name="${this.name}" value="${this.value}" placeholder="${this.label}" @input=${this._onInput} @change=${this._onChange} />
+                <div class="input-inline">
+                    <input id="input" class="input ${this._placeholder ? "hasPlaceholder" : null}" type="${this.type}" name="${this.name}" value="${this.value}" placeholder="${this._placeholder ?? this.label}" ?readonly="${this.readonly}" @input=${this._onInput} @change=${this._onChange} @keydown=${this._onKeyDown} />
+                    
+                    ${this.readonly ? html`<wrd-icon icon="content_paste" button @click="${this._copyToClipboard}" style="margin-left: auto"></wrd-icon>` : null}
+                </div>
+
+                <div class="label">${this.label}</div>
+            </label>
+
+            ${this.hideErrors ? null : html`<div class="error">${this.validationMessage}</div>`}
+        `;
+    }
+
+    renderTextarea() {
+        return html`
+            <label class="container">
+                <div class="input-inline">
+                    <textarea id="input" class="input" name="${this.name}" @input=${this._onInput} @change=${this._onChange} @keydown=${this._onKeyDown} ${this.type == "code" ? `spellcheck="false"` : null}>${this.value}</textarea>
+                </div>
 
                 <div class="label">${this.label}</div>
             </label>

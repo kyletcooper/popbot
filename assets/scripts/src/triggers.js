@@ -10,7 +10,7 @@ window.popbot.triggers = [
 
         options: [
             {
-                default: "#id",
+                placeholder: "#id",
                 label: "Element Selector"
             }
         ],
@@ -55,7 +55,7 @@ window.popbot.triggers = [
 
         options: [
             {
-                default: 75,
+                placeholder: 75,
                 type: "number",
                 label: "Scroll Depth"
             }
@@ -84,7 +84,7 @@ window.popbot.triggers = [
 
         options: [
             {
-                default: "#id",
+                placeholder: "#id",
                 label: "Form Selector"
             }
         ],
@@ -106,6 +106,19 @@ window.popbot.triggers = [
 
     /*      TIME        */
     {
+        id: "instant",
+        label: "Instant",
+
+        icon: "bolt",
+        category: "Time",
+        color: "#1E92F8",
+
+        setupTrigger: function (popBot) {
+            popBot.pop();
+            setTimeout(() => popBot.pop(), window.popbot.config.timeBeforeFirstPopup + 1);
+        }
+    },
+    {
         id: "idle",
         label: "Idle Time",
 
@@ -115,7 +128,7 @@ window.popbot.triggers = [
 
         options: [
             {
-                default: 30,
+                placeholder: 30,
                 type: "number",
                 label: "Idle Duration"
             }
@@ -148,7 +161,7 @@ window.popbot.triggers = [
 
         options: [
             {
-                default: 60,
+                placeholder: 60,
                 type: "number",
                 label: "Duration Time"
             }
@@ -172,7 +185,7 @@ window.popbot.triggers = [
 
         options: [
             {
-                default: "click",
+                placeholder: "click",
                 label: "Event Type"
             }
         ],

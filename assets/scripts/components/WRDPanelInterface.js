@@ -8,6 +8,7 @@ export class WRDPanelInterface extends LitElement {
         },
     };
 
+    static isPanel = true;
     static key = undefined;
     static defaultValue = {};
 
@@ -15,6 +16,8 @@ export class WRDPanelInterface extends LitElement {
         super();
 
         this.value = this.constructor.defaultValue;
+
+        this.isPanel = true;
     }
 
     connectedCallback() {
@@ -28,22 +31,21 @@ export class WRDPanelInterface extends LitElement {
     createRenderRoot() {
         const root = super.createRenderRoot();
 
-        root.addEventListener("wrd-panel-open", e => {
-            return this._onOpen(e);
-        })
-
-        root.addEventListener("wrd-panel-close", e => {
-            return this._onClose(e);
-        })
+        root.addEventListener("wrd-panel-open", this._onOpen.bind(this));
+        root.addEventListener("wrd-panel-close", this._onClose.bind(this));
 
         return root;
     }
 
-    openPanel() { this.renderRoot.querySelector("#panel").openPanel(); }
+    isOpen() { return this.renderRoot.querySelector("#panel").isOpen(); }
 
-    closePanel() { this.renderRoot.querySelector("#panel").closePanel(); }
+    openPanel() { return this.renderRoot.querySelector("#panel").openPanel(); }
 
-    togglePanel() { this.renderRoot.querySelector("#panel").togglePanel(); }
+    closePanel() { return this.renderRoot.querySelector("#panel").closePanel(); }
+
+    togglePanel() { return this.renderRoot.querySelector("#panel").togglePanel(); }
+
+    getCountOpenDescendentPanels() { return this.renderRoot.querySelector("#panel").getCountOpenDescendentPanels(); }
 
 
     _hasChanges() {

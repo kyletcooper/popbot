@@ -78,9 +78,7 @@ export class WRDGraph extends LitElement {
 
         this._points = response.data;
 
-        console.log(this._points);
         this._proccessPoints();
-        console.log(this._points);
     }
 
     _proccessPoints() {
@@ -119,8 +117,15 @@ export class WRDGraph extends LitElement {
     // STYLE
 
     static styles = css`
+        .container{
+            position: relative;
+        }
+
         .labels{
             text-align: right;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
 
         .title{
@@ -206,8 +211,10 @@ export class WRDGraph extends LitElement {
                 <div class="graph">
                     ${map(this._points, point => html`
                         <div class="point">
-                            <div class="bar ${point.count == 0 ? "empty" : "not-empty"}" title="${point.count}" style="height: ${((point.count - this.min) / (this.max - this.min)) * 100}%"></div>
-                            
+                            <wrd-tooltip label="${point.count}">
+                                <div class="bar ${point.count == 0 ? "empty" : "not-empty"}" style="height: ${((point.count - this.min) / (this.max - this.min)) * 100}%"></div>
+                            </wrd-tooltip>
+
                             <div class="date">
                                 ${this._points.length < 32 ? point.day.getDate() : null}
                             </div>

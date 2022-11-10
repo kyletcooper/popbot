@@ -23,6 +23,7 @@ export class WRDHeader extends LitElement {
         .container{
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
             gap: 1.5rem;
             height: 100%;
         }
@@ -35,6 +36,8 @@ export class WRDHeader extends LitElement {
         }
 
         .slot{
+            display: flex;
+            gap: 0.5rem;
             margin-left: auto;
         }
     `;

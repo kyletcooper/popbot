@@ -3,7 +3,6 @@ import { LitElement, css, html } from 'lit';
 export class WRDInlineEditable extends LitElement {
     static properties = {
         value: { type: String, reflect: true },
-        key: {},
         saving: { state: true },
     };
 
@@ -19,34 +18,20 @@ export class WRDInlineEditable extends LitElement {
     async save() {
         this.saving = true;
 
-        var form_data = new FormData(); // We use formdata so $_POST is filled in PHP
-
-        form_data.append("action", "inlineSave");
-        form_data.append("post_id", window.popbot.wp.post_id);
-        form_data.append("nonce", window.popbot.fetch.nonce);
-        form_data.append("key", this.key);
-        form_data.append("value", this.value);
-
-        const responseRaw = await fetch(window.popbot.fetch.ajax_url, {
-            method: 'POST',
-            body: form_data
+        const response = await popbot.manager.fetch.send("popbot_setTitle", {
+            "title": this.value,
+            "post_id": window.popbot.wp.post_id,
+            "_wpnonce": window.popbot.fetch.action_nonces.popbot_setTitle
         });
 
-        this.saving = false;
-
-        try {
-            const response = await responseRaw.json();
-
-            if (responseRaw.ok && response.success) {
-                WRDToast("Saved.");
-            }
-            else {
-                WRDToast("An error occured.");
-            }
+        if (response.success) {
+            WRDToast("Saved.");
         }
-        catch (e) {
+        else {
             WRDToast("An error occured.");
         }
+
+        this.saving = false;
     }
 
     _onBlur(e) {

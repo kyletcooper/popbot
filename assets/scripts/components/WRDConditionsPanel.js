@@ -41,11 +41,41 @@ export class WRDConditionsPanel extends WRDPanelInterface {
     }
 
     add() {
-        this.value = [...this.value, { condition: "", comparison: "", value: "" }];
+        this.value = [...this.value, { condition: "url.href", comparison: "equal", value: "" }];
     }
 
+    openPanelCustomConditions() {
+        this.renderRoot?.querySelector("#customConditions")?.openPanel();
+    }
 
-    // STYLE
+    render() {
+        return html`
+            <wrd-panel id="panel" header="Manage Conditions">
+                <div class="wrapper">
+                    <p class="info">
+                        The PopBot will display when the Trigger fires and all these conditions are met.
+                    </p>
+
+                    ${this.value.map((condition) => {
+            return html`<wrd-condition condition="${condition.condition}" comparison="${condition.comparison}" value="${condition.value}"></wrd-condition>`
+        })
+            }
+
+                    <wrd-icon class="remove" icon="remove" button @click=${this.remove}></wrd-icon>
+        
+                    <wrd-icon class="add" icon="add" button @click=${this.add}></wrd-icon>
+
+                </div>
+
+                <div slot="options" class="options">
+                    <wrd-button secondary id="button" @click=${this.openPanelCustomConditions}>Custom Conditions</wrd-button>
+                    <wrd-button id="button" @click=${this.save}>Save Changes</wrd-button>
+                </div>
+
+                <wrd-custom-conditions-panel id="customConditions"></wrd-custom-conditions-panel>
+            </wrd-panel>
+    `;
+    }
 
     static styles = css`
         .wrapper{
@@ -72,40 +102,11 @@ export class WRDConditionsPanel extends WRDPanelInterface {
         }
 
         .options{
-            display: flex;
-            justify-content: end;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
         }
     `;
-
-
-
-    // MARKUP
-
-    render() {
-        return html`
-            <wrd-panel id="panel" header="Manage Conditions">
-                <div class="wrapper">
-                    <p class="info">
-                        The PopBot will display when the Trigger fires and all these conditions are met. <a href="#">Learn more about Conditions</a>.
-                    </p>
-
-                    ${this.value.map((condition) => {
-            return html`<wrd-condition condition="${condition.condition}" comparison="${condition.comparison}" value="${condition.value}"></wrd-condition>`
-        })
-            }
-
-                    <wrd-icon class="remove" icon="remove" button @click=${this.remove}></wrd-icon>
-        
-                    <wrd-icon class="add" icon="add" button @click=${this.add}></wrd-icon>
-
-                </div>
-
-                <div slot="options" class="options">
-                    <wrd-button id="button" @click=${this.save}>Save Changes</wrd-button>
-                </div>
-            </wrd-panel>
-    `;
-    }
 }
 
 customElements.define('wrd-conditions-panel', WRDConditionsPanel);

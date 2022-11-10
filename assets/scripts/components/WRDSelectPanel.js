@@ -14,6 +14,8 @@ export class WRDSelectPanel extends LitElement {
         this.selected = []; // List of keys for selected slot elements.
         this.max = -1;
 
+        this.isPanel = true;
+
         this.addEventListener("click", e => {
             if (e.target.hasAttribute("key")) {
                 this.toggleKey(e.target.getAttribute("key"));
@@ -35,11 +37,15 @@ export class WRDSelectPanel extends LitElement {
         })
     }
 
-    openPanel() { this.renderRoot.querySelector("#panel").openPanel(); }
+    isOpen() { return this.renderRoot.querySelector("#panel").isOpen(); }
 
-    closePanel() { this.renderRoot.querySelector("#panel").closePanel(); }
+    openPanel() { return this.renderRoot.querySelector("#panel").openPanel(); }
 
-    togglePanel() { this.renderRoot.querySelector("#panel").togglePanel(); }
+    closePanel() { return this.renderRoot.querySelector("#panel").closePanel(); }
+
+    togglePanel() { return this.renderRoot.querySelector("#panel").togglePanel(); }
+
+    getCountOpenDescendentPanels() { return this.renderRoot.querySelector("#panel").getCountOpenDescendentPanels(); }
 
     toggleKey(key) {
         if (this.selected.includes(key)) {

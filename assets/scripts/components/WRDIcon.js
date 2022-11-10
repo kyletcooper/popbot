@@ -4,7 +4,8 @@ export class WRDIcon extends LitElement {
     static properties = {
         label: {},
         icon: {},
-        button: { type: Boolean }
+        button: { type: Boolean },
+        reverse: { type: Boolean },
     };
 
     constructor() {
@@ -13,6 +14,7 @@ export class WRDIcon extends LitElement {
         this.label = "";
         this.icon = "done";
         this.button = false;
+        this.reverse = false;
     }
 
 
@@ -25,6 +27,7 @@ export class WRDIcon extends LitElement {
             --text: black;
             --bg: transparent;
             --size: 48px;
+            --gap: 0.5rem;
 
             display: inline-block;
         }
@@ -37,7 +40,7 @@ export class WRDIcon extends LitElement {
             display: flex;
             align-items: center;
             justify-content: start;
-            gap: 0.5rem;
+            gap: var(--gap);
 
             background: none;
             padding: 0;
@@ -45,6 +48,9 @@ export class WRDIcon extends LitElement {
             border: 0;
 
             transition: all 0.2s ease;
+        }
+        .container.reverse{
+            flex-direction: row-reverse;
         }
 
         button.container{
@@ -73,13 +79,18 @@ export class WRDIcon extends LitElement {
             font-family: 'Material Icons';
             font-weight: normal;
             font-style: normal;
-            font-size: calc(var(--size) / 2);  /* Preferred icon size */
+            font-size: calc(var(--size) / 2);
             line-height: 1;
             text-transform: none;
             letter-spacing: normal;
             word-wrap: normal;
             white-space: nowrap;
             direction: ltr;
+
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
 
             /* Support for all WebKit browsers. */
             -webkit-font-smoothing: antialiased;
@@ -110,7 +121,7 @@ export class WRDIcon extends LitElement {
     render() {
         if (this.button) {
             return html`
-                <button class="container">
+                <button class="container ${this.reverse ? "reverse" : null}">
 
                     <div class="icon">
                         ${this.icon}
@@ -130,7 +141,7 @@ export class WRDIcon extends LitElement {
         }
         else {
             return html`
-                <div class="container">
+                <div class="container ${this.reverse ? "reverse" : null}">
 
                     <div class="icon">
                         ${this.icon}

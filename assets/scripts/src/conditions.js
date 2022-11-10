@@ -1,3 +1,17 @@
+const getCookie = (name) => {
+    const cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookieArr = cookies[i].split("=");
+        if (name == cookieArr[0].trim()) {
+            return decodeURIComponent(cookieArr[1]);
+        }
+    }
+
+    return null;
+};
+
+
 window.popbot.conditions = [
     {
         id: "url.href",
@@ -40,7 +54,17 @@ window.popbot.conditions = [
         id: "user.device.isMobile",
         label: "Is Mobile",
         category: "Device",
-        value: navigator.userAgentData.mobile,
+        value: navigator.userAgentData.mobile ? 1 : 0,
+        options: [
+            {
+                id: '0',
+                label: 'False'
+            },
+            {
+                id: '1',
+                label: 'True'
+            }
+        ]
     },
     {
         id: "user.device.lang",
@@ -55,54 +79,91 @@ window.popbot.conditions = [
         value: navigator.userAgentData.platform,
     },
 
-    {
-        id: "user.location.region",
-        label: "Region",
-        category: "Geolocation",
-        value: window.popbot?.condition_values['user.location.region'],
-    },
-    {
-        id: "user.location.continent",
-        label: "Continent",
-        category: "Geolocation",
-        value: window.popbot?.condition_values['user.location.continent'],
-    },
-    {
-        id: "user.location.country",
-        label: "Country",
-        category: "Geolocation",
-        value: window.popbot?.condition_values['user.location.country'],
-    },
-    {
-        id: "user.location.city",
-        label: "City",
-        category: "Geolocation",
-        value: window.popbot?.condition_values['user.location.city'],
-    },
+    // {
+    //     id: "user.location.region",
+    //     label: "Region",
+    //     category: "Geolocation",
+    //     value: getCookie('popBot_geolocation_region'),
+    // },
+    // {
+    //     id: "user.location.continent",
+    //     label: "Continent",
+    //     category: "Geolocation",
+    //     value: getCookie('popBot_geolocation_continent'),
+    // },
+    // {
+    //     id: "user.location.country",
+    //     label: "Country",
+    //     category: "Geolocation",
+    //     value: getCookie('popBot_geolocation_country'),
+    // },
+    // {
+    //     id: "user.location.city",
+    //     label: "City",
+    //     category: "Geolocation",
+    //     value: getCookie('popBot_geolocation_city'),
+    // },
 
     {
         id: "user.journey.referrer",
         label: "Referrer",
         category: "User Journey",
-        value: window.popbot?.condition_values['user.journey.referrer'],
+        value: getCookie("popBot_journey_referrer"),
     },
     {
         id: "user.journey.returning",
         label: "Is Returning",
         category: "User Journey",
-        value: window.popbot?.condition_values['user.journey.returning'],
+        value: getCookie("popBot_journey_returning"),
+        options: [
+            {
+                id: '0',
+                label: 'False'
+            },
+            {
+                id: '1',
+                label: 'True'
+            }
+        ]
     },
     {
         id: "user.journey.landing",
         label: "Is First Page",
         category: "User Journey",
-        value: window.popbot?.condition_values['user.journey.landing'],
+        value: getCookie("popBot_journey_landing"),
+        options: [
+            {
+                id: '0',
+                label: 'False'
+            },
+            {
+                id: '1',
+                label: 'True'
+            }
+        ]
     },
     {
         id: "user.journey.pageCount",
-        label: "Pages Visited",
+        label: "Pages Count",
         category: "User Journey",
-        value: window.popbot?.condition_values['user.journey.pageCount'],
+        value: getCookie("popBot_journey_pageCount"),
+    },
+
+    {
+        id: "post.isFrontPage",
+        label: "Is Front Page",
+        category: "Post",
+        value: window.popbot?.condition_values['post.isFrontPage'] ? 1 : 0,
+        options: [
+            {
+                id: '0',
+                label: 'False'
+            },
+            {
+                id: '1',
+                label: 'True'
+            }
+        ]
     },
 
     {
@@ -165,7 +226,17 @@ window.popbot.conditions = [
         id: "user.wp.isLoggedIn",
         label: "Is Logged In",
         category: "WordPress User",
-        value: window.popbot?.condition_values["user.wp.isLoggedIn"],
+        value: window.popbot?.condition_values["user.wp.isLoggedIn"] ? 1 : 0,
+        options: [
+            {
+                id: '0',
+                label: 'False'
+            },
+            {
+                id: '1',
+                label: 'True'
+            }
+        ]
     },
     {
         id: "user.wp.login",
@@ -185,12 +256,5 @@ window.popbot.conditions = [
         label: "Random Number",
         category: "Maths",
         value: Math.floor(Math.random() * 100)
-    },
-
-    {
-        id: "user.optimise.group",
-        label: "A/B Group",
-        category: "Optimisation",
-        value: localStorage.getItem("popbot.optimise.group"),
     },
 ];

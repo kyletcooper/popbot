@@ -59,8 +59,6 @@ class pobBotDebugger {
     }
 
     animBtnSuccess(btn) {
-        console.log(btn);
-
         btn.animate([
             {
                 background: "#10b981",
@@ -123,7 +121,8 @@ class pobBotDebugger {
         container.append(body);
 
         window.popbot.bots.forEach(bot => {
-            body.append(this.createBotElement(bot))
+            let botHTML = this.createBotElement(bot);
+            if (botHTML) body.append(botHTML);
         });
 
         container.append(footer);
@@ -145,6 +144,7 @@ class pobBotDebugger {
                 position: fixed;
                 bottom: 2rem;
                 left: 2rem;
+                z-index: 999;
 
                 width: 50ch;
                 max-width: 75vw;
@@ -280,6 +280,8 @@ class pobBotDebugger {
     }
 
     createBotElement(bot) {
+        if (!bot) return false;
+
         let container = document.createElement("div");
 
         let cause = document.createElement("div");
@@ -318,14 +320,12 @@ class pobBotDebugger {
     }
 
     clearCookies(e) {
-        let cookies_prefix = "popBot_status_";
+        const cookies_prefix = "popBot_";
+        let cookies = document.cookie.split(';').map(i => i.trim()).filter(c => c.startsWith(cookies_prefix));
 
-        document.cookie.split(';').forEach(c => {
-            let name = c.trim();
-
-            if (name.startsWith(cookies_prefix)) {
-                document.cookie = name + '=; Max-Age=0'; // Delete cookie
-            }
+        cookies.forEach(c => {
+            const name = c.split("=")[0];
+            window.popbot.manager.cookie.set(name, '');
         });
 
         this.animBtnSuccess(e.target);

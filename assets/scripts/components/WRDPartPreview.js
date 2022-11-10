@@ -4,15 +4,17 @@ export class WRDPartPreview extends LitElement {
     static properties = {
         part: {},
         name: {},
+        image: {},
         scale: { type: Number },
     };
 
     constructor() {
         super();
 
-        this.scale = 0.5;
         this.name = "";
         this.part = "";
+        this.image = false;
+        this.scale = 0.5;
     }
 
 
@@ -30,13 +32,7 @@ export class WRDPartPreview extends LitElement {
         *{
             box-sizing: border-box;
         }
-
-        .container{
-
-        }
-
         
-
         .iframe-wrapper{
             padding: 1rem;
             margin-bottom: 0.5rem;
@@ -58,13 +54,23 @@ export class WRDPartPreview extends LitElement {
             user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome, Edge, Opera and Firefox */
 
-
             width: 100%;
-            height: 100%;
+            height: 150px;
 
             border: none;
             margin: 0;
             padding: 0;
+        }
+
+        .image{
+            width: 100%;
+            height: 150px;
+            margin-bottom: 0.5rem;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #f1f5f9;
+            border-radius: 0.5rem;
         }
 
         .name{
@@ -91,9 +97,15 @@ export class WRDPartPreview extends LitElement {
     render() {
         return html`
             <div class="container">
-                <div class="iframe-wrapper">
-                    <iframe loading="lazy" src="${`${window.popbot.wp.home_url}/popBotPreview?part=${this.part}&scale=${this.scale}`}"></iframe>
-                </div>
+                ${this.image ?
+                html`
+                    <div class="image" style="background-image: url(${this.image})"></div>` :
+
+                html`
+                    <div class="iframe-wrapper">
+                        <iframe loading="lazy" src="${`${window.popbot.wp.home_url}/popBotPreview?part=${this.part}&scale=${this.scale}`}"></iframe>
+                    </div>
+                `}
 
                 <h3 class="name">${this.name}</h3>
             </div>

@@ -32,7 +32,7 @@ export class WRDStatistic extends LitElement {
 
         let num = 100 * Math.abs((A - B) / ((A + B) / 2));
         num = Math.round(num * 10) / 10;
-        return num;
+        return num + "%";
     }
 
     get _changedClass() {

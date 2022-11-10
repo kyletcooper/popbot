@@ -6,6 +6,8 @@ class popBot {
      *      @param array           conditions         Array of all conditions that must be met. Each object must have a "condition", "value" and "comparison" key.
      */
     constructor(opts) {
+        if (!opts) return false;
+
         var element = document.getElementById(opts.id);
 
         if (!element) {
@@ -20,13 +22,13 @@ class popBot {
         this.element = element;
         this.trigger = opts.trigger;
         this.conditions = opts.conditions;
+        this.inline = this.element.classList.contains("popbot-inline");
 
         // Find the trigger
         this.triggerObject = window.popbot.triggers.find(trig => trig.id == this.trigger.trigger);
         this.triggerObject?.setupTrigger(this, this.trigger.threshold);
 
         this.element.popBot = this;
-        this._hide();
 
         // Add event listeners to template
         this.element.addEventListener("click", e => {
@@ -46,7 +48,6 @@ class popBot {
         for (const conditionRules of this.conditions) {
             // Example value of 'condition':
             // { condition: "url.search", comparison: "contains", value: "utm" }
-
             let comparison = window.popbot.comparisons.find(o => o.id === conditionRules.comparison); // Has the implimentation details of the comparitor.
             let condition = window.popbot.conditions.find(o => o.id === conditionRules.condition); // The condition global relating to this rule.
 
@@ -80,12 +81,18 @@ class popBot {
             }
         }
 
-        if (window.popbot.manager.bots.isShowing()) {
+        // If a PopBot is displayed inline, we don't need to check if other bots are showing.
+        if (window.popbot.manager.bots.isShowing() && !this.inline) {
             window.popbot.manager.debug.popAttempt(this, false, `A PopBot is already showing.`);
             return false;
         }
 
-        if (Date.now() - window.popbot.manager.bots.lastShown < window.popbot.config.timeBetweenPopups) {
+        if (Date.now() - window.popbot.manager.bots.loadTime < window.popbot.config.timeBeforeFirstPopup && !this.inline) {
+            window.popbot.manager.debug.popAttempt(this, false, `Not long enough since page load.`);
+            return false;
+        }
+
+        if (Date.now() - window.popbot.manager.bots.lastShown < window.popbot.config.timeBetweenPopups && !this.inline) {
             window.popbot.manager.debug.popAttempt(this, false, `Not long enough since last PopBot.`);
             return false;
         }
@@ -95,6 +102,7 @@ class popBot {
         }
 
         this._show();
+        return true;
     }
 
     _show() {
@@ -172,7 +180,6 @@ class popBot {
 }
 
 window.popbot.manager = {
-
     debug: {
         store: [],
 
@@ -223,6 +230,37 @@ window.popbot.manager = {
             const responseJSON = await response.json();
             return responseJSON;
         },
+
+        api: async function (endpoint, args = {}, method = "GET") {
+            let url = new URL(`${popbot.wp.home_url}/wp-json/${endpoint}`);
+
+            let opts = {
+                method: method,
+                headers: new Headers({
+                    'X-WP-Nonce': window.popbot.fetch.rest_nonce
+                })
+            }
+
+            if (method == "GET") {
+                for (const key in args) {
+                    url.searchParams.append(key, args[key]);
+                }
+            }
+            else {
+                if (args instanceof FormData) {
+                    opts.body = args;
+                }
+                else {
+                    opts.body = new FormData();
+
+                    for (const key in args) {
+                        opts.body.append(key, args[key]);
+                    }
+                }
+            }
+
+            return await fetch(url.href, opts).then(res => res.json())
+        }
     },
 
     cookie: {
@@ -257,21 +295,8 @@ window.popbot.manager = {
          * @return null
          */
         set: function (name, value) {
-            var cookie = name + "=" + encodeURIComponent(value);
+            var cookie = name + "=" + encodeURIComponent(value) + ";path=/;expires=max-age";
             document.cookie = cookie;
-        }
-    },
-
-    dom: {
-        /**
-         * Attaches a shadow DOM and moves all children into it.
-         */
-        shadowChildren(element) {
-            var shadow = element.attachShadow({ mode: 'open' });
-
-            while (element.childNodes.length > 0) {
-                shadow.appendChild(element.childNodes[0]);
-            }
         }
     },
 
@@ -317,6 +342,26 @@ window.popbot.manager = {
             this.store.push(popBot);
         },
 
+        setupCustomConditions: async function () {
+            const conditions = await popbot.manager.fetch.api('/wp/v2/popbot_condition/', { context: 'edit', _fields: ["id", "slug", "title", "content"] });
+
+            for (const condition of conditions) {
+                try {
+                    let func = new Function(condition.content.raw);
+
+                    window.popbot.conditions.push({
+                        category: "Custom",
+                        id: `custom.${condition.slug}`,
+                        label: condition.title.rendered,
+                        value: func(),
+                    });
+                }
+                catch (e) {
+                    console.error(e);
+                }
+            }
+        },
+
         /**
          * Creates all the popBots sent by the server.
          */
@@ -332,13 +377,25 @@ window.popbot.manager = {
             }
         },
 
-        lastShown: Date.now(),
+        lastShown: 0,
+        loadTime: Date.now(),
         store: []
-    }
+    },
 };
 
 document.addEventListener("DOMContentLoaded", () => {
     window.popbot.manager.bots.init();
+    window.popbot.manager.bots.setupCustomConditions();
 
-    console.log("PopBot Manager:", window.popbot.manager);
+    // For the gutenberg Conditions format type.
+    // It isn't a block type so it can't have it's own script file easily
+    document.querySelectorAll(".popbot-condition").forEach(el => {
+        if (document.body.classList.contains('block-editor-page')) return;
+
+        const tag = el.textContent;
+        const condition = window.popbot.conditions.find(cond => cond.id == tag);
+
+        el.textContent = condition?.value;
+        el.style.opacity = 1;
+    });
 }, { once: true });

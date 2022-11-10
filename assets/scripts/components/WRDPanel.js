@@ -14,16 +14,26 @@ export class WRDPanel extends LitElement {
         this.button = "Save Changes";
         this.open = false;
 
+        this.isPanel = true;
+
         window.addEventListener("keydown", e => {
-            if (e.key == "Escape" && this.open && !this.getOpenChildPanels().length) {
+            if (e.key == "Escape" && this.open && this.getOpenChildPanels().length < 1) {
                 // Check if there are any child panels open that the user is trying to exit first.
                 this.closePanel();
             }
         });
+
+        // Used to keep track of open children
+        // this.addEventListener('wrd-panel-open', () => this.requestUpdate());
+        // this.addEventListener('wrd-panel-close', () => this.requestUpdate());
+        // For some reason some events are getting trapped by the shadow DOM. Workaround:
+        // this.addEventListener('click', () => this.requestUpdate());
+        // this.addEventListener('keydown', () => this.requestUpdate());
     }
 
-
-    // FUNCTIONALITY
+    isOpen() {
+        return this.open;
+    }
 
     closePanel() {
         const event = new CustomEvent('wrd-panel-close', {
@@ -62,6 +72,8 @@ export class WRDPanel extends LitElement {
 
     getChildren() {
         let slot = this.shadowRoot.querySelector("slot");
+        if (!slot) return [];
+
         let children = slot.assignedElements();
 
         return children;
@@ -71,25 +83,61 @@ export class WRDPanel extends LitElement {
         let children = this.getChildren();
 
         let panels = children.filter(child => {
-            return child.matches('wrd-panel');
+            return child.isPanel;
         });
 
         return panels;
     }
 
     getOpenChildPanels() {
-        let children = this.getChildren();
+        let children = this.getChildPanels();
 
         let panels = children.filter(child => {
-            return child.matches('wrd-panel[open]');
+            return child.isOpen();
         });
 
         return panels;
     }
 
+    getCountOpenDescendentPanels() {
+        let children = this.getOpenChildPanels();
+        let count = children.length;
+
+        children.forEach(child => {
+            count += child.getCountOpenDescendentPanels();
+        });
+
+        return count;
+    }
 
 
-    // STYLE
+    render() {
+        return html`
+            <div class="container" style="--open-children: ${this.getCountOpenDescendentPanels()}" ?inert=${!this.open}>
+
+                <div class="backdrop" @click="${this.closePanel}" >
+                </div>
+
+                <aside class="panel">
+                    <header class="header">
+                        <wrd-icon class="close" icon="close" button @click="${this.closePanel}"></wrd-icon>
+
+                        <h2 class="title">
+                            ${this.header}
+                        </h2>
+                    </header>
+
+                    <main class="main">
+                        <slot id="childrenSlot"></slot>
+                    </main>
+
+                    <footer class="footer">
+                        <slot id="optionsSlot" name="options"></slot>
+                    </footer >
+                </aside >
+            </div >
+        `;
+    }
 
     static styles = css`
         :host{
@@ -123,7 +171,7 @@ export class WRDPanel extends LitElement {
             right: 0;
             bottom: 0;
 
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.333);
             transition: opacity 0.5s ease;
         }
 
@@ -145,11 +193,19 @@ export class WRDPanel extends LitElement {
             display: grid;
             grid-template-rows: auto 1fr auto;
 
-            transition: transform 0.5s ease;
+            box-shadow:
+                -1.4px 0px 3.6px rgba(0, 0, 0, 0.024),
+                -3.8px 0px 10px rgba(0, 0, 0, 0.035),
+                -9px 0px 24.1px rgba(0, 0, 0, 0.046),
+                -30px 0px 80px rgba(0, 0, 0, 0.07)
+            ;
+
+            transition: transform 0.5s ease, right 0.5s ease, box-shadow 0.5s ease;
         }
 
         .container[inert] .panel{
             transform: translateX(var(--width));
+            box-shadow: none;
         }
 
         .header{
@@ -162,7 +218,8 @@ export class WRDPanel extends LitElement {
 
         .title{
             font-size: 1.3rem;
-            font-weight: bold;
+            font-weight: 500;
+            color: #0f172a;
             margin: 0;
         }
 
@@ -182,38 +239,6 @@ export class WRDPanel extends LitElement {
             grid-column: 2;
         }
     `;
-
-
-
-    // MARKUP
-
-    render() {
-        return html`
-            <div class="container" ?inert=${!this.open}>
-
-                <div class="backdrop" @click="${this.closePanel}" >
-                </div>
-
-                <aside class="panel">
-                    <header class="header">
-                        <wrd-icon class="close" icon="close" button @click="${this.closePanel}"></wrd-icon>
-
-                        <h2 class="title">
-                            ${this.header}
-                        </h2>
-                    </header>
-
-                    <main class="main">
-                        <slot id="childrenSlot"></slot>
-                    </main>
-
-                    <footer class="footer">
-                        <slot id="optionsSlot" name="options"></slot>
-                    </footer >
-                </aside >
-            </div >
-    `;
-    }
 }
 
 customElements.define('wrd-panel', WRDPanel);
