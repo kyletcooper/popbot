@@ -1,4 +1,3 @@
-
 === PopBot ===
 Contributors: wrdstudio
 Tags: pop-up, popup, conversion, cro, chatbox, modal, dialog, goals, conversion rate, conversion rate optimisation, triggers, conditions
@@ -6,6 +5,7 @@ Requires at least: 5.2
 Tested up to: 6.1
 Requires PHP: 7.4.0
 License: GPLv3 or later
+Stable tag: trunk
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Convert your users with targeted pop-ups. Use triggers & rules to nudge your users towards conversions when they\'re ready using the perfect pop-up.
@@ -27,6 +27,9 @@ You can set start & end dates for your pop-up to become visible on your site and
 
 = Analytics Built-in =
 We automatically track how well your pop-ups are performing so you can make informed decisions on how you to push your conversion rate even further.
+
+= Intelligent Behaviour =
+Our pop-ups are intelligent and work together to ensure they're not overwhelming the user. They're limited to only show one pop-up at a time, and not too soon after one another. If a user dismisses or converts on a pop-up they won't be shown it again.
 
 == Installation ==
 To install follow one of the following sets of instructions:
