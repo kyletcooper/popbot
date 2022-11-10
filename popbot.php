@@ -75,6 +75,8 @@ class popbotPlugin
         add_action('init', ['popbot\\popbotPlugin', 'registerCustomConditionsPostType']);
         add_action('init', ['popbot\\popbotPlugin', 'updateUserJourney']);
 
+        add_action('use_block_editor_for_post', ['popbot\\popbotPlugin', 'setPopbotBlockEditor'], PHP_INT_MAX, 2);
+
         add_action("wp_enqueue_scripts", ['popbot\\popbotPlugin', 'registerAssets']);
         add_action("admin_enqueue_scripts", ['popbot\\popbotPlugin', 'registerAssets']);
         add_action("wp_enqueue_scripts", ['popbot\\popbotPlugin', 'publicEnqueue']);
@@ -443,6 +445,18 @@ class popbotPlugin
             "message" => __("Success", 'popbot'),
             "data" => $popbot->detectConfigurationErrors()
         ]);
+    }
+
+    /**
+     * Forces PopBot post type to use the block editor, even if disabled elsewhere.
+     */
+    static function setPopbotBlockEditor($use_block_editor, $post)
+    {
+        if ($post->post_type == popbotPlugin::POST_TYPE) {
+            return true;
+        }
+
+        return $use_block_editor;
     }
 
     /**
