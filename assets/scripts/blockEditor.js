@@ -38,6 +38,27 @@ wp.domReady(() => {
     });
 
 
+    // Slider
+    document.querySelectorAll('[data-pbslider="parent"]').forEach(parent => {
+        const slider = parent.querySelector('[data-pbslider="slider"]');
+        const input = parent.querySelector('[data-pbslider="input"]');
+
+        const update = e => {
+            let val = parseInt(e.target.value);
+            const max = parseInt(slider.max);
+            const min = parseInt(slider.min);
+
+            val = Math.min(Math.max(val, min), max);
+
+            slider.value = val;
+            input.value = val;
+        };
+
+        slider.addEventListener("input", update);
+        input.addEventListener("input", update);
+    });
+
+
     document.querySelectorAll("[data-pbmetabox-presets-toggle]").forEach(btn => {
         const field = btn.closest("[data-pbmetabox]");
         const sections = field.querySelectorAll("[data-pbmetabox-presets]");

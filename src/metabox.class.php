@@ -67,6 +67,7 @@ class Popbot_Metabox
             "select",
             "position",
             "background-size",
+            "slider",
         ];
 
         $input['value'] = $input['default'];
@@ -184,6 +185,15 @@ class Popbot_Metabox
                     <div class="pb_metabox__bgSize__custom" data-pbmetabox-presets="false">
                         <input class="pb_metabox__input" type='text' name='<?php esc_attr_e($input['slug']) ?>' value='<?php $isPreset ? null : esc_attr_e($input['value']); ?>' />
                     </div>
+                </div>
+            <?php
+                break;
+
+            case "slider":
+            ?>
+                <div class="pb_slider" data-pbslider="parent">
+                    <input data-pbslider="slider" class="pb_slider__range" type="range" min="<?php esc_attr_e($input['min'] ?? 0) ?>" max="<?php esc_attr_e($input['max'] ?? 100) ?>" value="<?php esc_attr_e($input['value']) ?>">
+                    <input data-pbslider="input" class="pb_slider__input pb_metabox__input" type="number" min="<?php esc_attr_e($input['min'] ?? 0) ?>" max="<?php esc_attr_e($input['max'] ?? 100) ?>" value="<?php esc_attr_e($input['value']) ?>" name="<?php esc_attr_e($input['slug']) ?>">
                 </div>
 <?php
                 break;

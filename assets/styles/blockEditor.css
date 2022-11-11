@@ -204,3 +204,23 @@
     border-color: #191E23;
     color: #fff;
 }
+
+
+.pb_slider{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 7ch;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+.pb_slider .pb_slider__input{
+    min-width: 0px;
+    padding: 0.5rem;
+    -moz-appearance: textfield;
+}
+.pb_slider__input::-webkit-outer-spin-button,
+.pb_slider__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
