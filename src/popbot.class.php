@@ -4,27 +4,57 @@ namespace popbot;
 
 class popBot
 {
+    private int $blog_id;
     private int $post_id;
     private \WP_Post $post;
 
     /**
      * Creates a popBot instance.
      */
-    function __construct(int $post_id)
+    function __construct(int $post_id, int $blog_id = null)
     {
-        $post = get_post($post_id);
+        $this->blog_id = $blog_id ?? get_current_blog_id();
+        $this->post_id = $post_id;
+        $this->_refreshPost();
 
-        if (!$post || $post->post_type != popbotPlugin::POST_TYPE) {
+        if (!$this->post || $this->post->post_type != popbotPlugin::POST_TYPE) {
             trigger_error("Post not found or of wrong type.");
         }
-
-        $this->post_id = $post_id;
-        $this->post = $post;
     }
 
     private function _refreshPost()
     {
+        $this->_setBlog();
         $this->post = get_post($this->post_id);
+        $this->_resetBlog();
+    }
+
+    private function _setBlog()
+    {
+        if (is_multisite()) {
+            switch_to_blog($this->blog_id);
+        }
+    }
+
+    private function _resetBlog()
+    {
+        if (is_multisite()) {
+            restore_current_blog();
+        }
+    }
+
+    private function _setMeta(string $key, string $value)
+    {
+        $this->_setBlog();
+        return update_post_meta($this->post_id, $key, $value);
+        $this->_resetBlog();
+    }
+
+    private function _getMeta(string $key)
+    {
+        $this->_setBlog();
+        return get_post_meta($this->post_id, $key, true);
+        $this->_resetBlog();
     }
 
 
@@ -37,23 +67,20 @@ class popBot
      * 
      * This ID is unique across multisite installations.
      */
-    function getID(): int
+    function getUUID(): string
     {
-        return $this->post_id;
+        return $this->blog_id . "_" . $this->post_id;
     }
 
-    /**
-     * Gets a PopBot by it's unique ID.
-     * 
-     * The ID is not the post_id, but a generated ID unique across the multisite.
-     */
-    static function getByID(string $id)
+    static function fromUUID(string $uuid): popBot
     {
-        $post = get_post($id);
+        [$blog_id, $post_id] = explode("_", $uuid);
+        return new popBot($post_id, $blog_id);
+    }
 
-        if (!$post) return null;
-
-        return new PopBot($post->ID);
+    function getPostID(): int
+    {
+        return $this->post_id;
     }
 
     /**
@@ -69,11 +96,15 @@ class popBot
      */
     function setTitle(string $title)
     {
+        $this->_setBlog();
+
         $ret = wp_update_post([
             "ID" => $this->post_id,
             "post_title" => $title,
             "post_name" => sanitize_title($title)
         ]);
+
+        $this->_resetBlog();
 
         $this->_refreshPost();
 
@@ -88,17 +119,14 @@ class popBot
         return $this->post->post_content;
     }
 
-    /**
-     * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
-     */
     function setTemplate(string $template)
     {
-        return update_post_meta($this->post_id, "template", $template);
+        return $this->_setMeta("template", $template);
     }
 
     function getTemplate(): string
     {
-        return get_post_meta($this->post_id, "template", true) ?: "native/chatbox.php"; // Default template
+        return $this->_getMeta("template") ?: "native/box"; // Default template
     }
 
     function getTemplateObject(): template
@@ -106,19 +134,16 @@ class popBot
         return new template($this->getTemplate());
     }
 
-    /**
-     * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
-     */
     function setTrigger($trigger)
     {
         if (is_array($trigger)) $trigger = json_encode($trigger);
 
-        return update_post_meta($this->post_id, "trigger", $trigger);
+        return $this->_setMeta("trigger", $trigger);
     }
 
     function getTrigger(): string
     {
-        return get_post_meta($this->post_id, "trigger", true) ?: '{"trigger":"","threshold":""}';
+        return $this->_getMeta("trigger") ?: '{"trigger":"","threshold":""}';
     }
 
     function getTriggerArray(): array
@@ -126,19 +151,16 @@ class popBot
         return json_decode($this->getTrigger(), true);
     }
 
-    /**
-     * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
-     */
     function setConditions($conditions)
     {
         if (is_array($conditions)) $conditions = json_encode($conditions);
 
-        return update_post_meta($this->post_id, "conditions", $conditions);
+        return $this->_setMeta("conditions", $conditions);
     }
 
     function getConditions(): string
     {
-        return get_post_meta($this->post_id, "conditions", true) ?: "[]";
+        return $this->_getMeta("conditions") ?: "[]";
     }
 
     function getConditionsArray(): array
@@ -148,12 +170,12 @@ class popBot
 
     function setVariantParent($variant_parent_id)
     {
-        return update_post_meta($this->post_id, "variant_parent", $variant_parent_id);
+        return $this->_setMeta("variant_parent", $variant_parent_id);
     }
 
     function getVariantParent(): string
     {
-        return get_post_meta($this->post_id, "variant_parent", true) ?: "0";
+        return $this->_getMeta("variant_parent") ?: "0";
     }
 
     function getVariants(bool $include_original = true): array
@@ -170,19 +192,16 @@ class popBot
         return $bots;
     }
 
-    /**
-     * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
-     */
-    function setVisibility($conditions)
+    function setVisibility($visibility)
     {
-        if (is_array($conditions)) $conditions = json_encode($conditions);
+        if (is_array($visibility)) $visibility = json_encode($visibility);
 
-        return update_post_meta($this->post_id, "visibility", $conditions);
+        return $this->_setMeta("visibility", $visibility);
     }
 
     function getVisibility(): string
     {
-        return get_post_meta($this->post_id, "visibility", true) ?: '{ "visibility": "public", "start": null, "end": null }';
+        return $this->_getMeta("visibility") ?: '{ "visibility": "public", "start": null, "end": null }';
     }
 
     function getVisibilityArray(): array
@@ -219,12 +238,16 @@ class popBot
 
     function addTags(...$tagIDs)
     {
+        $this->_setBlog();
         wp_set_post_terms($this->post_id, $tagIDs, popbotPlugin::TAGS_TAXONOMY, true);
+        $this->_resetBlog();
     }
 
     function removeTag(...$tagIDs)
     {
+        $this->_setBlog();
         wp_remove_object_terms($this->post_id, $tagIDs, popbotPlugin::TAGS_TAXONOMY);
+        $this->_resetBlog();
     }
 
     function toggleTag($tagID)
@@ -238,17 +261,24 @@ class popBot
 
     function hasTag($tagID)
     {
+        $this->_setBlog();
         return has_term($tagID, popbotPlugin::TAGS_TAXONOMY, $this->post_id);
+        $this->_resetBlog();
     }
 
     function getTags()
     {
+        $this->_setBlog();
         return get_the_terms($this->post_id, popbotPlugin::TAGS_TAXONOMY);
+        $this->_resetBlog();
     }
 
     function getEditLink(): string
     {
+        $this->_setBlog();
         $url = page::get("popbot-edit")->getLink();
+        $this->_resetBlog();
+
         $url = add_query_arg([
             "post" => $this->post_id,
         ], $url);
@@ -258,7 +288,8 @@ class popBot
 
     function getShortcode(): string
     {
-        return "[popbot id='$this->post_id']";
+        $id = $this->getUUID();
+        return "[popbot id='$id']";
     }
 
 
@@ -274,7 +305,7 @@ class popBot
     {
         return [
             "title"      => $this->getTitle(),
-            "id"         => $this->getID(),
+            "id"         => $this->getUUID(),
             "trigger"    => $this->getTriggerArray(),
             "conditions" => $this->getConditionsArray(),
         ];
@@ -301,7 +332,9 @@ class popBot
      */
     function delete()
     {
+        $this->_setBlog();
         return wp_delete_post($this->post_id);
+        $this->_resetBlog();
     }
 
 
@@ -317,10 +350,12 @@ class popBot
     {
         $template = $this->getTemplateObject();
 
-        // Generate HTML
+        $this->_setBlog();
         $content = $template->getHTML($this->post_id);
+        $this->_resetBlog();
+
         $wrapper = "<div class='popbot-container $classes' id='%s' hidden inert>%s</div>";
-        $html = sprintf($wrapper, $this->getID(), $content);
+        $html = sprintf($wrapper, $this->getUUID(), $content);
 
         $template->enqueueAssets();
 
@@ -352,9 +387,11 @@ class popBot
             'numberposts' => -1,
             'ignore_sticky_posts' => true,
 
+            'blog_id' => get_current_blog_id(),
             'variant_of' => '',
             'include_variants' => false,
             'ignore_multisite_sticky' => false,
+            'is_multisite_sticky' => false,
         ]);
 
 
@@ -376,8 +413,17 @@ class popBot
             ]);
         }
 
+        if ($args['is_multisite_sticky']) {
+            static::addMetaQuery($args, [
+                'key' => 'sticky',
+                'value' => '1',
+                'compare' => '=',
+            ]);
+        }
 
+        if (is_multisite()) switch_to_blog($args['blog_id']);
         $posts = get_posts($args);
+        if (is_multisite()) restore_current_blog();
 
         $bots = [];
         foreach ($posts as $post) {
@@ -385,9 +431,11 @@ class popBot
         }
 
 
-        if (!$args['ignore_multisite_sticky'] && is_multisite() && get_current_blog_id() !== get_main_site_id()) {
+        if (!$args['ignore_multisite_sticky'] && is_multisite() && $args['blog_id'] !== get_main_site_id()) {
             // In multisite and not in the main site, get the sticky bots from the main site.
-            // array_push($bots, ...static::queryMultisiteStickyBots($args));
+            $args['blog_id'] = get_main_site_id();
+            $args['is_multisite_sticky'] = true;
+            array_push($bots, ...static::query($args));
         }
 
         return $bots;
@@ -406,28 +454,6 @@ class popBot
         return [
             $new_meta_query
         ];
-    }
-
-    static function queryMultisiteStickyBots(array $args = []): array
-    {
-        switch_to_blog(get_main_site_id());
-
-        $default_args = [
-            "meta_query" => [
-                "relation" => "AND",
-                [
-                    "key" => "multisite_sticky",
-                    "value" => 1,
-                ]
-            ]
-        ];
-
-        $args = array_merge($default_args, $args);
-        $bots = static::query($args);
-
-        restore_current_blog();
-
-        return $bots;
     }
 
     static function create(string $title = ""): popBot

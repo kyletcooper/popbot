@@ -40,7 +40,7 @@ namespace popbot;
                     <div class="wrd-3col">
                         <?php foreach ($bots as $bot) : ?>
 
-                            <wrd-bot post_id="<?php echo $bot->getID() ?>"></wrd-bot>
+                            <wrd-bot post_id="<?php echo $bot->getPostID() ?>"></wrd-bot>
 
                         <?php endforeach; ?>
                     </div>
