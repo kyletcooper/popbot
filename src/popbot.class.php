@@ -4,8 +4,6 @@ namespace popbot;
 
 class popBot
 {
-    const ANALYTICS_EVENTS = ["shown", "converted", "dismissed"];
-
     private int $post_id;
     private \WP_Post $post;
 
@@ -36,6 +34,8 @@ class popBot
 
     /**
      * @return string The unique post ID.
+     * 
+     * This ID is unique across multisite installations.
      */
     function getID(): int
     {
@@ -43,26 +43,17 @@ class popBot
     }
 
     /**
-     * @return string The unique post slug.
+     * Gets a PopBot by it's unique ID.
+     * 
+     * The ID is not the post_id, but a generated ID unique across the multisite.
      */
-    function getSlug(): string
+    static function getByID(string $id)
     {
-        return $this->post->post_name;
-    }
+        $post = get_post($id);
 
-    /**
-     * @return int|WP_Error The post ID on success. The value 0 or WP_Error on failure.
-     */
-    function setSlug(string $slug)
-    {
-        $ret = wp_update_post([
-            "ID" => $this->post_id,
-            "post_name" => $slug
-        ]);
+        if (!$post) return null;
 
-        $this->_refreshPost();
-
-        return $ret;
+        return new PopBot($post->ID);
     }
 
     /**
@@ -153,6 +144,30 @@ class popBot
     function getConditionsArray(): array
     {
         return json_decode($this->getConditions(), true);
+    }
+
+    function setVariantParent($variant_parent_id)
+    {
+        return update_post_meta($this->post_id, "variant_parent", $variant_parent_id);
+    }
+
+    function getVariantParent(): string
+    {
+        return get_post_meta($this->post_id, "variant_parent", true) ?: "0";
+    }
+
+    function getVariants(bool $include_original = true): array
+    {
+        $bots = static::query([
+            "variant_of" => $this->post_id,
+            "ignore_multisite_sticky" => true,
+        ]);
+
+        if ($include_original) {
+            array_push($bots, $this);
+        }
+
+        return $bots;
     }
 
     /**
@@ -248,20 +263,6 @@ class popBot
 
 
 
-    /*      ANALYTICS     */
-
-    /**
-     * Records an analytics event.
-     */
-    function addAnalyticsEvent(string $event): bool
-    {
-        if (!in_array($event, static::ANALYTICS_EVENTS)) return false;
-
-        return analytics::insertEvent($event, $this->post_id);
-    }
-
-
-
 
 
     /*      HELPERS      */
@@ -273,7 +274,7 @@ class popBot
     {
         return [
             "title"      => $this->getTitle(),
-            "id"         => $this->getSlug(),
+            "id"         => $this->getID(),
             "trigger"    => $this->getTriggerArray(),
             "conditions" => $this->getConditionsArray(),
         ];
@@ -319,16 +320,9 @@ class popBot
         // Generate HTML
         $content = $template->getHTML($this->post_id);
         $wrapper = "<div class='popbot-container $classes' id='%s' hidden inert>%s</div>";
-        $html = sprintf($wrapper, $this->getSlug(), $content);
+        $html = sprintf($wrapper, $this->getID(), $content);
 
-        // Enqueue Assets
-        if ($template->hasCSS()) {
-            wp_enqueue_style("popbot-style-" . $this->getSlug(), $template->getCSSURL());
-        }
-
-        if ($template->hasJS()) {
-            wp_enqueue_style("popbot-script-" . $this->getSlug(), $template->getJSURL());
-        }
+        $template->enqueueAssets();
 
         echo $html;
     }
@@ -342,18 +336,47 @@ class popBot
     /**
      * Returns an array of popBots.
      * 
+     * @param array $args Arguments to filter query. Extends the options of WP_Query with:
+     *      bool    include_variants            Default false
+     *      string  variant_of                  Default empty. ID of original.
+     *      bool    ignore_multisite_sticky     Default false.
+     *      
+     * 
      * @return array Array of popBot Objects.
      */
     static function query(array $args = []): array
     {
-        $default_args = [
-            "post_type" => popbotPlugin::POST_TYPE,
-            "post_status" => "any",
-            "numberposts" => -1,
-            "ignore_sticky_posts" => true,
-        ];
+        $args = array_merge($args, [
+            'post_type' => popbotPlugin::POST_TYPE,
+            'post_status' => 'any',
+            'numberposts' => -1,
+            'ignore_sticky_posts' => true,
 
-        $args = array_merge($default_args, $args);
+            'variant_of' => '',
+            'include_variants' => false,
+            'ignore_multisite_sticky' => false,
+        ]);
+
+
+        if ($args['variant_of']) {
+            $args['include_variants'] = true;
+
+            static::addMetaQuery($args, [
+                'key' => 'variant_parent',
+                'value' => $args['variant_of'],
+                'compare' => '=',
+            ]);
+        }
+
+        if (!$args['include_variants']) {
+            static::addMetaQuery($args, [
+                'key' => 'variant_parent',
+                'value' => 'bug #23268',
+                'compare' => 'NOT EXISTS',
+            ]);
+        }
+
+
         $posts = get_posts($args);
 
         $bots = [];
@@ -361,12 +384,28 @@ class popBot
             $bots[] = new popBot($post->ID);
         }
 
-        // if (is_multisite() && get_current_blog_id() !== get_main_site_id()) {
-        //     // In multisite and not in the main site, get the sticky bots from the main site.
-        //     array_push($bots, ...static::queryMultisiteStickyBots($args));
-        // }
+
+        if (!$args['ignore_multisite_sticky'] && is_multisite() && get_current_blog_id() !== get_main_site_id()) {
+            // In multisite and not in the main site, get the sticky bots from the main site.
+            // array_push($bots, ...static::queryMultisiteStickyBots($args));
+        }
 
         return $bots;
+    }
+
+    static function addMetaQuery(array $args, array $new_meta_query, string $relation = 'AND'): array
+    {
+        if (array_key_exists('meta_query', $args)) {
+            return [
+                'relation' => $relation,
+                $args['meta_query'],
+                $new_meta_query,
+            ];
+        }
+
+        return [
+            $new_meta_query
+        ];
     }
 
     static function queryMultisiteStickyBots(array $args = []): array
@@ -389,18 +428,6 @@ class popBot
         restore_current_blog();
 
         return $bots;
-    }
-
-    /**
-     * Gets a PopBot by it's slug.
-     */
-    static function getBySlug(string $slug)
-    {
-        $post = get_page_by_path($slug, OBJECT, popbotPlugin::POST_TYPE);
-
-        if (!$post) return null;
-
-        return new PopBot($post->ID);
     }
 
     static function create(string $title = ""): popBot

@@ -244,8 +244,9 @@ class popbotPlugin
      */
     static function ajax_analyticsEvent()
     {
-        $bot = popBot::getBySlug($_REQUEST['id']);
+        $bot = popBot::getByID($_REQUEST['id']);
         $event = $_REQUEST['event'];
+        $url = $_REQUEST['url'];
 
         if (!$bot) {
             wp_send_json_error([
@@ -253,7 +254,7 @@ class popbotPlugin
             ]);
         }
 
-        $bot->addAnalyticsEvent($event);
+        analytics::insertEvent($event, $bot->getID(), $url);
 
         wp_send_json_success();
     }
@@ -318,7 +319,7 @@ class popbotPlugin
         wp_send_json_success([
             "wp" => get_post($post_id),
 
-            "slug" => $bot->getSlug(),
+            "id" => $bot->getID(),
             "title" => $bot->getTitle(),
             "edit_link" => $bot->getEditLink(),
 

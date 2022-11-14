@@ -141,6 +141,17 @@ class template
         return $this->getURL("screenshot.png");
     }
 
+    function enqueueAssets()
+    {
+        if ($this->hasCSS()) {
+            wp_enqueue_style("popbot-style-" . $this->slug, $this->getCSSURL());
+        }
+
+        if ($this->hasJS()) {
+            wp_enqueue_style("popbot-script-" . $this->slug, $this->getJSURL());
+        }
+    }
+
     function readDetails()
     {
         $json = $this->getFile("meta.json");

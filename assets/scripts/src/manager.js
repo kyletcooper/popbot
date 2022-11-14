@@ -124,7 +124,7 @@ class popBot {
         this.element.dispatchEvent(event);
 
         // Report event to server
-        window.popbot.manager.fetch.send("popbotAnalytics", { event: "shown", id: this.id });
+        window.popbot.manager.fetch.send("popbotAnalytics", { event: "shown", id: this.id, url: location.href });
     }
 
     _hide() {
@@ -157,7 +157,7 @@ class popBot {
 
         window.popbot.manager.cookie.set(this.cookie, "converted");
 
-        window.popbot.manager.fetch.send("popbotAnalytics", { event: "converted", id: this.id });
+        window.popbot.manager.fetch.send("popbotAnalytics", { event: "converted", id: this.id, url: location.href });
 
         window.popbot.manager.debug.popAttempt(this, false, `Converted on by user.`);
 
@@ -170,7 +170,7 @@ class popBot {
 
         window.popbot.manager.cookie.set(this.cookie, "dismissed");
 
-        window.popbot.manager.fetch.send("popbotAnalytics", { event: "dismissed", id: this.id });
+        window.popbot.manager.fetch.send("popbotAnalytics", { event: "dismissed", id: this.id, url: location.href });
 
         window.popbot.manager.debug.popAttempt(this, false, `Dismissed by user.`);
 

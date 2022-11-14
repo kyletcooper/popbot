@@ -4,6 +4,8 @@ namespace popbot;
 
 class analytics
 {
+    const ANALYTICS_EVENTS = ["shown", "converted", "dismissed"];
+
     static function switchToMainBlog(): void
     {
         if (is_multisite()) {
@@ -51,7 +53,7 @@ class analytics
     {
         global $wpdb;
         static::switchToMainBlog();
-        
+
         $table_name = self::getTableName();
         $sql = "DROP TABLE IF EXISTS $table_name";
         $wpdb->query($sql);
@@ -62,8 +64,12 @@ class analytics
     /**
      * @return int|false The number of rows inserted, or false on error.
      */
-    static function insertEvent(string $event_type, int $post_id)
+    static function insertEvent(string $event_type, int $post_id, string $url)
     {
+        if (!in_array($event_type, static::ANALYTICS_EVENTS)) {
+            return false;
+        }
+
         global $wpdb;
         static::switchToMainBlog();
 
