@@ -1006,17 +1006,31 @@
             z-index: 10;
 
             height: 85px;
+            overflow: hidden;
 
             background: white;
             box-shadow: 0 10px 15px -3px rgb(254 206 246 / 0.3), 0 4px 6px -4px rgb(254 206 246 / 0.3);
         }
 
+        @media screen and (max-width: 782px){
+            .header{
+                top: 46px;
+            }
+        }
+
+        @media screen and (max-width: 600px){
+            .header{
+                top: 0;
+            }
+        }
+
         .container{
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             gap: 1.5rem;
+            align-items: center;
             height: 100%;
+            max-width: 100%;
         }
 
         .title{
@@ -1026,10 +1040,16 @@
             color: rgb(15 23 42);
         }
 
-        .slot{
-            display: flex;
-            gap: 0.5rem;
-            margin-left: auto;
+        .actions{
+            display: none;
+        }
+
+        @media (min-width: 726px){
+            .actions{
+                display: flex;
+                gap: 0.5rem;
+                margin-left: auto;
+            }
         }
     `;render(){return o.dy`
             <header class="header">
@@ -1045,7 +1065,7 @@
                             ${this.label}
                         </h1>
 
-                        <div class="slot">
+                        <div class="actions">
                             <slot></slot>
                         </div>
                         
@@ -1168,74 +1188,83 @@
                             </div>
                             `:null}
                 </div>
-            `}}customElements.define("wrd-icon",s)},955:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={value:{type:String,reflect:!0},saving:{state:!0}};firstUpdated(){super.firstUpdated(),this.resize()}focus(){this.renderRoot?.querySelector("#input").focus()}async save(){this.saving=!0,(await popbot.manager.fetch.send("popbot_setTitle",{title:this.value,post_id:window.popbot.wp.post_id,_wpnonce:window.popbot.fetch.action_nonces.popbot_setTitle})).success?WRDToast("Saved."):WRDToast("An error occured."),this.saving=!1}_onBlur(e){this.save()}_onInput(e){this.value=e.target.value,this.resize()}_onFocus(e){this.resize()}resize(){this.renderRoot.querySelector(".input").style.width=this.value.length+"ch"}static styles=o.iv`
+            `}}customElements.define("wrd-icon",s)},955:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={value:{type:String,reflect:!0},saving:{state:!0}};connectedCallback(){super.connectedCallback(),this.resize()}firstUpdated(){super.firstUpdated(),this.resize()}focus(){this.renderRoot?.querySelector("#input").focus()}async save(){this.saving=!0,(await popbot.manager.fetch.send("popbot_setTitle",{title:this.value,post_id:window.popbot.wp.post_id,_wpnonce:window.popbot.fetch.action_nonces.popbot_setTitle})).success?WRDToast("Saved."):WRDToast("An error occured."),this.saving=!1}_onBlur(e){this.save()}_onInput(e){this.value=e.target.value,this.resize()}_onFocus(e){this.resize()}resize(){const e=this.renderRoot.querySelector(".input"),t=this.renderRoot.querySelector(".sizer"),i=this.renderRoot.querySelector(".underline"),o=window.getComputedStyle(t);t.textContent=e.value,i.style.width=o.width}render(){return o.dy`
+        <div class="container ${this.saving?"saving":null}">
+            <input class="input" @blur="${this._onBlur}" @focus="${this._onFocus}" @input="${this._onInput}" .value="${this.value||""}"/>
+            <div class="underline"></div>
+        </div>
+
+        <div class="sizer"></div>
+        `}static styles=o.iv`
         :host{
             display: block;
-            width: fit-content;
         }
 
         .container{
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-
-            border-bottom: 2px solid transparent;
-            border-radius: 2px;
-
-            padding: 0.25rem 0.5rem;
-            margin-left: -0.5rem;
+            position: relative;
         }
 
-        .container:focus-within{
-            border-bottom: 2px solid #cbd5e1;
+        .sizer{
+            position: absolute;
+            top: 0;
+            left: -99999px;
+            height: 0;
+            overflow: hidden;
+            visibility: hidden;
+            white-space: nowrap;
         }
-
-        .input{
-            border: none;
-            padding: 0px;
-            margin: 0px;
-
+        .sizer, .input{
             font-size: inherit;
             font-weight: inherit;
             font-family: inherit;
             color: inherit;
+        }
+
+        .input{
+            display: block;
+            width: 100%;
+
+            border: none;
+            padding: 0px;
+            margin: 0px;
+            background: none;
         }
         .input:focus,
         .input:focus-visible{
             outline: none;
         }
 
-        .spinner {
-            width: 0.75rem;
-            height: 0.75rem;
-
-            border-radius: 50%;
-            border: 0.15rem solid #64748b;
-            border-color: #64748b #64748b #64748b transparent;
-
-            animation: spinner 1.2s linear infinite;
-            transition: opacity 0.2s ease;
-        }
-        
-        .spinner[data-hidden]{
+        .underline{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            min-width: 5ch;
+            height: 2px;
+            background: #E2E8F0;
             opacity: 0;
+            pointer-events: none;
+        }
+        .container:focus-within .underline{
+            opacity: 1;
+        }
+        .container.saving .underline{
+            opacity: 1;
+            animation: save 1s infinite ease;
         }
 
-        @keyframes spinner {
+        @keyframes save {
             0% {
-              transform: rotate(0deg);
+                background: #F696DE;
+            }
+            50% {
+                background: #D824AB;
             }
             100% {
-              transform: rotate(360deg);
+                background: #F696DE;
             }
         }
         
-    `;render(){return o.dy`
-            <div class="container">
-                <input id="input" class="input" @blur="${this._onBlur}" @focus="${this._onFocus}" @input="${this._onInput}" .value="${this.value||""}"/>
-                <div class="spinner" ?data-hidden="${!this.saving}"></div>
-            </div>
-        `}}customElements.define("wrd-inline-editable",s)},8:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={label:{},required:{type:Boolean},readonly:{type:Boolean},range:{},hideErrors:{type:Boolean,attribute:"hide-errors"},_value:{reflect:!0,attribute:"value"},_type:{attribute:"type"},_name:{attribute:"name"},_placeholder:{attribute:"placeholder"}};static formAssociated=!0;constructor(){super(),this._internals=this.attachInternals(),this._value="",this.addEventListener("focus",(e=>{this._onFocus()})),this.addEventListener("invalid",(e=>{e.preventDefault(),this._container.animate([{outline:"0px solid #fecdd3",borderColor:"#ADBAC2"},{offset:.2,borderColor:"#f43f5e"},{outline:"0.75rem solid transparent",borderColor:"#ADBAC2"}],300)}))}firstUpdated(){this._onInput(),this.setAttribute("tabindex",0)}get value(){return"string"==typeof this._value?this._value.trim():String(this._value).trim()}set value(e){this._value=e}get form(){return this._internals.form}get name(){return this._name}get type(){return this._type}get validity(){return this._internals.validity}get validationMessage(){return this._internals.validationMessage}get willValidate(){return this._internals.willValidate}checkValidity(){return this._internals.checkValidity()}reportValidity(){return this._internals.reportValidity()}get _input(){return this.renderRoot?.querySelector("#input")}get _container(){return this.renderRoot?.querySelector(".container")}_checkValidity(){return!this._input.willValidate&&this._input.validationMessage?(this._internals.setValidity({customError:!0},this._input.validationMessage),!1):this.required&&this._value.length<1?(this._internals.setValidity({customError:!0},"This field is required."),!1):(this._internals.setValidity({}),!0)}_onKeyDown(e){"Tab"==e.key&&"code"==this.type&&e.shiftKey&&(e.preventDefault(),e.target.setRangeText("\t",e.target.selectionStart,e.target.selectionStart,"end"))}_onInput(){this._value=this._input.value;const e=new CustomEvent("wrd-input-input",{bubbles:!0,cancelable:!1,detail:{input:this._input,value:this._input.value}});this.dispatchEvent(e),this._internals.setFormValue(this._value),this._checkValidity()}_onChange(){const e=new CustomEvent("wrd-input-change",{bubbles:!0,cancelable:!1,detail:{input:this._input,value:this._input.value}});this.dispatchEvent(e)}_onFocus(){this._input.focus()}_copyToClipboard(){navigator.clipboard.writeText(this.value).then((()=>{window.WRDToast("Copied to clipboard")}))}static styles=o.iv`
+    `}customElements.define("wrd-inline-editable",s)},8:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={label:{},required:{type:Boolean},readonly:{type:Boolean},range:{},hideErrors:{type:Boolean,attribute:"hide-errors"},_value:{reflect:!0,attribute:"value"},_type:{attribute:"type"},_name:{attribute:"name"},_placeholder:{attribute:"placeholder"}};static formAssociated=!0;constructor(){super(),this._internals=this.attachInternals(),this._value="",this.addEventListener("focus",(e=>{this._onFocus()})),this.addEventListener("invalid",(e=>{e.preventDefault(),this._container.animate([{outline:"0px solid #fecdd3",borderColor:"#ADBAC2"},{offset:.2,borderColor:"#f43f5e"},{outline:"0.75rem solid transparent",borderColor:"#ADBAC2"}],300)}))}firstUpdated(){this._onInput(),this.setAttribute("tabindex",0)}get value(){return"string"==typeof this._value?this._value.trim():String(this._value).trim()}set value(e){this._value=e}get form(){return this._internals.form}get name(){return this._name}get type(){return this._type}get validity(){return this._internals.validity}get validationMessage(){return this._internals.validationMessage}get willValidate(){return this._internals.willValidate}checkValidity(){return this._internals.checkValidity()}reportValidity(){return this._internals.reportValidity()}get _input(){return this.renderRoot?.querySelector("#input")}get _container(){return this.renderRoot?.querySelector(".container")}_checkValidity(){return!this._input.willValidate&&this._input.validationMessage?(this._internals.setValidity({customError:!0},this._input.validationMessage),!1):this.required&&this._value.length<1?(this._internals.setValidity({customError:!0},"This field is required."),!1):(this._internals.setValidity({}),!0)}_onKeyDown(e){"Tab"==e.key&&"code"==this.type&&e.shiftKey&&(e.preventDefault(),e.target.setRangeText("\t",e.target.selectionStart,e.target.selectionStart,"end"))}_onInput(){this._value=this._input.value;const e=new CustomEvent("wrd-input-input",{bubbles:!0,cancelable:!1,detail:{input:this._input,value:this._input.value}});this.dispatchEvent(e),this._internals.setFormValue(this._value),this._checkValidity()}_onChange(){const e=new CustomEvent("wrd-input-change",{bubbles:!0,cancelable:!1,detail:{input:this._input,value:this._input.value}});this.dispatchEvent(e)}_onFocus(){this._input.focus()}_copyToClipboard(){navigator.clipboard.writeText(this.value).then((()=>{window.WRDToast("Copied to clipboard")}))}static styles=o.iv`
         .container{
             position: relative;
 
@@ -1594,12 +1623,13 @@
         .submit{
             grid-column: 2;
         }
-    `}customElements.define("wrd-panel",s),document.addEventListener("click",(e=>{if(e.target.matches("[data-panel]")){let t=e.target.dataset.panel,i=document.querySelector(t);i&&void 0!==typeof i.togglePanel&&i.togglePanel()}}))},803:(e,t,i)=>{i.d(t,{I:()=>s});var o=i(392);class s extends o.oi{static properties={value:{type:Object,reflect:!0}};static isPanel=!0;static key=void 0;static defaultValue={};constructor(){super(),this.value=this.constructor.defaultValue,this.isPanel=!0}connectedCallback(){super.connectedCallback(),this.value||(this.value=this.constructor.defaultValue)}createRenderRoot(){const e=super.createRenderRoot();return e.addEventListener("wrd-panel-open",this._onOpen.bind(this)),e.addEventListener("wrd-panel-close",this._onClose.bind(this)),e}getChip(){return!1}isOpen(){return this.renderRoot.querySelector("#panel").isOpen()}openPanel(){return this.renderRoot.querySelector("#panel").openPanel()}closePanel(){return this.renderRoot.querySelector("#panel").closePanel()}togglePanel(){return this.renderRoot.querySelector("#panel").togglePanel()}getCountOpenDescendentPanels(){return this.renderRoot.querySelector("#panel").getCountOpenDescendentPanels()}_hasChanges(){return!((e,t)=>{if(Object.is(e,t))return!0;if(typeof e!=typeof t)return!1;var i=Object.keys(e),o=Object.keys(t);if(i.length!==o.length)return!1;for(var s=0;s<i.length;s++)if(!Object.prototype.hasOwnProperty.call(t,i[s])||!Object.is(e[i[s]],t[i[s]]))return!1;return!0})(this._savedState,this.value)}_onOpen(e){this._saveState()}_onClose(e){this._hasChanges()&&(e.preventDefault(),WRDModal("You have unsaved changes!","Leaving now will revert all the changes you've made. Are you sure you don't want to save?","Go Back","Discard Changes").then((()=>{}),(()=>{this.discard(),this.closePanel()})))}_saveState(){Array.isArray(this.value)?this._savedState=Object.assign([],this.value):"string"==typeof this.value?this._savedState=(" "+this.value).slice(1):this._savedState=Object.assign({},this.value)}_restoreState(){this._savedState&&(this.value=this._savedState,this.requestUpdate())}discard(){this._restoreState()}async save(){let e=this.renderRoot.querySelector("#button");e&&(e.loading=!0);var t=new FormData;t.append("action","panelSave"),t.append("post_id",window.popbot.wp.post_id),t.append("nonce",window.popbot.fetch.nonce),t.append("key",this.constructor.key),"object"==typeof this.value?t.append("value",JSON.stringify(this.value)):t.append("value",this.value);const i=await fetch(window.popbot.fetch.ajax_url,{method:"POST",body:t});try{const e=await i.json();if(i.ok&&e.success){this._saveState();const e=new CustomEvent("wrd-panel-interface-saved",{bubbles:!0,cancelable:!0});this.dispatchEvent(e)}i.ok||(console.error("Fetch connection failed."),WRDToast("A connection could not be established to the server.")),e.data.message&&WRDToast(e.data.message)}catch(e){console.error("Fetch connection returned malformed response."),WRDToast("A connection could not be established to the server.")}e&&(e.loading=!1)}}},600:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={icon:{},label:{}};constructor(){super(),this.addEventListener("wrd-panel-interface-saved",(()=>this.requestUpdate()))}connectedCallback(){super.connectedCallback(),this.requestUpdate()}_onSlotChange(){this.requestUpdate()}get chip(){if(this.panel?.getChip)return this.panel.getChip()}get children(){const e=this.renderRoot.querySelector("#slot");return e?e.assignedElements({flatten:!0}):[]}get panel(){for(const e of this.children)if(e.isPanel)return e;return null}click(){this.panel?.openPanel()}render(){return o.dy`
+    `}customElements.define("wrd-panel",s),document.addEventListener("click",(e=>{if(e.target.matches("[data-panel]")){let t=e.target.dataset.panel,i=document.querySelector(t);i&&void 0!==typeof i.togglePanel&&i.togglePanel()}}))},803:(e,t,i)=>{i.d(t,{I:()=>s});var o=i(392);class s extends o.oi{static properties={value:{type:Object,reflect:!0}};static isPanel=!0;static key=void 0;static defaultValue={};constructor(){super(),this.value=this.constructor.defaultValue,this.isPanel=!0}connectedCallback(){super.connectedCallback(),this.value||(this.value=this.constructor.defaultValue)}createRenderRoot(){const e=super.createRenderRoot();return e.addEventListener("wrd-panel-open",this._onOpen.bind(this)),e.addEventListener("wrd-panel-close",this._onClose.bind(this)),e}getChip(){return!1}isOpen(){return this.renderRoot.querySelector("#panel").isOpen()}openPanel(){return this.renderRoot.querySelector("#panel").openPanel()}closePanel(){return this.renderRoot.querySelector("#panel").closePanel()}togglePanel(){return this.renderRoot.querySelector("#panel").togglePanel()}getCountOpenDescendentPanels(){return this.renderRoot.querySelector("#panel").getCountOpenDescendentPanels()}_hasChanges(){return!((e,t)=>{if(Object.is(e,t))return!0;if(typeof e!=typeof t)return!1;var i=Object.keys(e),o=Object.keys(t);if(i.length!==o.length)return!1;for(var s=0;s<i.length;s++)if(!Object.prototype.hasOwnProperty.call(t,i[s])||!Object.is(e[i[s]],t[i[s]]))return!1;return!0})(this._savedState,this.value)}_onOpen(e){this._saveState()}_onClose(e){this._hasChanges()&&(e.preventDefault(),WRDModal("You have unsaved changes!","Leaving now will revert all the changes you've made. Are you sure you don't want to save?","Go Back","Discard Changes").then((()=>{}),(()=>{this.discard(),this.closePanel()})))}_saveState(){Array.isArray(this.value)?this._savedState=Object.assign([],this.value):"string"==typeof this.value?this._savedState=(" "+this.value).slice(1):this._savedState=Object.assign({},this.value)}_restoreState(){this._savedState&&(this.value=this._savedState,this.requestUpdate())}discard(){this._restoreState()}async save(){let e=this.renderRoot.querySelector("#button");e&&(e.loading=!0);var t=new FormData;t.append("action","panelSave"),t.append("post_id",window.popbot.wp.post_id),t.append("nonce",window.popbot.fetch.nonce),t.append("key",this.constructor.key),"object"==typeof this.value?t.append("value",JSON.stringify(this.value)):t.append("value",this.value);const i=await fetch(window.popbot.fetch.ajax_url,{method:"POST",body:t});try{const e=await i.json();if(i.ok&&e.success){this._saveState();const e=new CustomEvent("wrd-panel-interface-saved",{bubbles:!0,cancelable:!0});this.dispatchEvent(e)}i.ok||(console.error("Fetch connection failed."),WRDToast("A connection could not be established to the server.")),e.data.message&&WRDToast(e.data.message)}catch(e){console.error("Fetch connection returned malformed response."),WRDToast("A connection could not be established to the server.")}e&&(e.loading=!1)}}},600:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={icon:{},label:{},href:{}};constructor(){super(),this.addEventListener("wrd-panel-interface-saved",(()=>this.requestUpdate()))}connectedCallback(){super.connectedCallback(),this.requestUpdate()}_onSlotChange(){this.requestUpdate()}get chip(){if(this.panel?.getChip)return this.panel.getChip()}get children(){const e=this.renderRoot.querySelector("#slot");return e?e.assignedElements({flatten:!0}):[]}get panel(){for(const e of this.children)if(e.isPanel)return e;return null}click(){this.href?window.open(this.href,"_blank"):this.panel?.openPanel()}render(){return o.dy`
             <button class="button" type="button" role="button" @click="${this.click}">
                 <wrd-icon class="icon" icon="${this.icon}" label="${this.label}"></wrd-icon>
 
                 ${this.chip?o.dy`<wrd-icon class="chip" icon="${this.chip.icon}" label="${this.chip.label}" style="background-color: ${this.chip.color}"></wrd-icon>`:null}
-                <wrd-icon class="arrow" icon="arrow_forward"></wrd-icon>
+                
+                <wrd-icon class="arrow" icon="${this.href?"open_in_new":"arrow_forward"}"></wrd-icon>
             </button>
 
             <slot id="slot" @slotchange="${this._onSlotChange}"></slot>
@@ -1646,11 +1676,19 @@
             --fill: #fff;
             --text: #fff;
 
+            display: none;
+            
             border-radius: 5rem;
             padding-left: 0.25rem;
             padding-right: 0.75rem;
             font-size: 0.8rem;
             text-transform: capitalize;
+        }
+
+        @media (min-width: 600px){
+            .chip{
+                display: block;
+            }
         }
     `}customElements.define("wrd-panel-opener",s)},446:(e,t,i)=>{var o=i(392);class s extends o.oi{static properties={part:{},name:{},image:{},scale:{type:Number}};constructor(){super(),this.name="",this.part="",this.image=!1,this.scale=.5}static styles=o.iv`
         :host{

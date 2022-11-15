@@ -4,6 +4,7 @@ export class WRDPanelOpener extends LitElement {
     static properties = {
         icon: {},
         label: {},
+        href: {},
     };
 
     constructor() {
@@ -44,8 +45,12 @@ export class WRDPanelOpener extends LitElement {
     }
 
     click() {
-        // console.log(this.panel);
-        this.panel?.openPanel();
+        if (this.href) {
+            window.open(this.href, "_blank");
+        }
+        else {
+            this.panel?.openPanel();
+        }
     }
 
     render() {
@@ -54,7 +59,8 @@ export class WRDPanelOpener extends LitElement {
                 <wrd-icon class="icon" icon="${this.icon}" label="${this.label}"></wrd-icon>
 
                 ${this.chip ? html`<wrd-icon class="chip" icon="${this.chip.icon}" label="${this.chip.label}" style="background-color: ${this.chip.color}"></wrd-icon>` : null}
-                <wrd-icon class="arrow" icon="arrow_forward"></wrd-icon>
+                
+                <wrd-icon class="arrow" icon="${this.href ? 'open_in_new' : 'arrow_forward'}"></wrd-icon>
             </button>
 
             <slot id="slot" @slotchange="${this._onSlotChange}"></slot>
@@ -104,11 +110,19 @@ export class WRDPanelOpener extends LitElement {
             --fill: #fff;
             --text: #fff;
 
+            display: none;
+            
             border-radius: 5rem;
             padding-left: 0.25rem;
             padding-right: 0.75rem;
             font-size: 0.8rem;
             text-transform: capitalize;
+        }
+
+        @media (min-width: 600px){
+            .chip{
+                display: block;
+            }
         }
     `;
 }

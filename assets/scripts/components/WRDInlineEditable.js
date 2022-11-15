@@ -6,6 +6,11 @@ export class WRDInlineEditable extends LitElement {
         saving: { state: true },
     };
 
+    connectedCallback() {
+        super.connectedCallback();
+        this.resize();
+    }
+
     firstUpdated() {
         super.firstUpdated();
         this.resize();
@@ -48,90 +53,95 @@ export class WRDInlineEditable extends LitElement {
     }
 
     resize() {
-        let inp = this.renderRoot.querySelector(".input");
-        inp.style.width = this.value.length + "ch";
+        const inp = this.renderRoot.querySelector(".input");
+        const sizer = this.renderRoot.querySelector(".sizer");
+        const underline = this.renderRoot.querySelector(".underline");
+        const styles = window.getComputedStyle(sizer);
+        sizer.textContent = inp.value;
+        underline.style.width = styles.width;
     }
 
+    render() {
+        return html`
+        <div class="container ${this.saving ? "saving" : null}">
+            <input class="input" @blur="${this._onBlur}" @focus="${this._onFocus}" @input="${this._onInput}" .value="${this.value || ''}"/>
+            <div class="underline"></div>
+        </div>
 
-
-    // STYLE
+        <div class="sizer"></div>
+        `;
+    }
 
     static styles = css`
         :host{
             display: block;
-            width: fit-content;
         }
 
         .container{
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-
-            border-bottom: 2px solid transparent;
-            border-radius: 2px;
-
-            padding: 0.25rem 0.5rem;
-            margin-left: -0.5rem;
+            position: relative;
         }
 
-        .container:focus-within{
-            border-bottom: 2px solid #cbd5e1;
+        .sizer{
+            position: absolute;
+            top: 0;
+            left: -99999px;
+            height: 0;
+            overflow: hidden;
+            visibility: hidden;
+            white-space: nowrap;
         }
-
-        .input{
-            border: none;
-            padding: 0px;
-            margin: 0px;
-
+        .sizer, .input{
             font-size: inherit;
             font-weight: inherit;
             font-family: inherit;
             color: inherit;
+        }
+
+        .input{
+            display: block;
+            width: 100%;
+
+            border: none;
+            padding: 0px;
+            margin: 0px;
+            background: none;
         }
         .input:focus,
         .input:focus-visible{
             outline: none;
         }
 
-        .spinner {
-            width: 0.75rem;
-            height: 0.75rem;
-
-            border-radius: 50%;
-            border: 0.15rem solid #64748b;
-            border-color: #64748b #64748b #64748b transparent;
-
-            animation: spinner 1.2s linear infinite;
-            transition: opacity 0.2s ease;
-        }
-        
-        .spinner[data-hidden]{
+        .underline{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            min-width: 5ch;
+            height: 2px;
+            background: #E2E8F0;
             opacity: 0;
+            pointer-events: none;
+        }
+        .container:focus-within .underline{
+            opacity: 1;
+        }
+        .container.saving .underline{
+            opacity: 1;
+            animation: save 1s infinite ease;
         }
 
-        @keyframes spinner {
+        @keyframes save {
             0% {
-              transform: rotate(0deg);
+                background: #F696DE;
+            }
+            50% {
+                background: #D824AB;
             }
             100% {
-              transform: rotate(360deg);
+                background: #F696DE;
             }
         }
         
     `;
-
-
-
-    // MARKUP
-
-    render() {
-        return html`
-            <div class="container">
-                <input id="input" class="input" @blur="${this._onBlur}" @focus="${this._onFocus}" @input="${this._onInput}" .value="${this.value || ''}"/>
-                <div class="spinner" ?data-hidden="${!this.saving}"></div>
-            </div>
-        `;
-    }
 }
 
 customElements.define('wrd-inline-editable', WRDInlineEditable);

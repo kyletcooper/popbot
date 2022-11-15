@@ -31,7 +31,7 @@ $popbot = new popBot(get_the_ID());
         <wrd-tag-picker post="<?php echo get_the_ID() ?>"></wrd-tag-picker>
     </wrd-tooltip>
 
-    <wrd-tooltip label="Delete PopBot">
+    <wrd-tooltip label="Delete">
         <wrd-trash-button post="<?php echo get_the_ID() ?>"></wrd-trash-button>
     </wrd-tooltip>
 </wrd-header>
@@ -40,15 +40,15 @@ $popbot = new popBot(get_the_ID());
 <wrd-container>
     <div class="wrd-row">
 
-        <main class="wrd-col-12 wrd-col-lg-6 wrd-col-xl-8">
-            <h2 class="wrd-h2">Edit</h2>
+        <main class="wrd-col-12 wrd-col-xl-8 wrd-col-xxl-7">
+            <h2 class="wrd-h3">Edit</h2>
 
             <div class="wrd-section" style="padding:0;">
                 <wrd-panel-opener icon="palette" label="Appearance">
                     <wrd-appearance-panel id="appearancePanel" value="<?php echo $popbot->getTemplate(); ?>"></wrd-appearance-panel>
                 </wrd-panel-opener>
 
-                <wrd-panel-opener icon="plumbing" label="Trigger">
+                <wrd-panel-opener icon="ads_click" label="Trigger">
                     <wrd-trigger-panel id="triggerPanel" value='<?php echo $popbot->getTrigger(); ?>'></wrd-trigger-panel>
                 </wrd-panel-opener>
 
@@ -56,7 +56,7 @@ $popbot = new popBot(get_the_ID());
                     <wrd-conditions-panel id="conditionsPanel" value='<?php echo $popbot->getConditions(); ?>'></wrd-conditions-panel>
                 </wrd-panel-opener>
 
-                <wrd-panel-opener icon="lock_clock" label="Visibility">
+                <wrd-panel-opener icon="event" label="Visibility">
                     <wrd-visibility-panel id="visibilityPanel" value='<?php echo $popbot->getVisibility(); ?>'></wrd-visibility-panel>
                 </wrd-panel-opener>
 
@@ -81,7 +81,7 @@ $popbot = new popBot(get_the_ID());
         </main>
 
         <aside class="wrd-col">
-            <h2 class="wrd-h2">Preview</h2>
+            <h2 class="wrd-h3">Preview</h2>
 
             <div class="wrd-section">
                 <wrd-bot-preview post="<?php echo get_the_ID() ?>" scale="0.75" show-errors show-controls style="min-height: 50vh;"></wrd-bot-preview>
