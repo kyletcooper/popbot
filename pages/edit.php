@@ -14,10 +14,10 @@ $popbot = new popBot(get_the_ID());
 
 ?>
 
-<wrd-appearance-panel id="appearancePanel" value="<?php echo $popbot->getTemplate(); ?>"></wrd-appearance-panel>
-<wrd-trigger-panel id="triggerPanel" value='<?php echo $popbot->getTrigger(); ?>'></wrd-trigger-panel>
-<wrd-conditions-panel id="conditionsPanel" value='<?php echo $popbot->getConditions(); ?>'></wrd-conditions-panel>
-<wrd-visibility-panel id="visibilityPanel" value='<?php echo $popbot->getVisibility(); ?>'></wrd-visibility-panel>
+
+
+
+
 
 
 <wrd-header back>
@@ -27,8 +27,8 @@ $popbot = new popBot(get_the_ID());
         <wrd-icon icon="text_fields" aria-label="Rename" title="Rename" button onclick="window.title.focus()"></wrd-icon>
     </wrd-tooltip>
 
-    <wrd-tooltip label="Manage Visibility">
-        <wrd-icon icon="lock_clock" button onclick="window.visibilityPanel.openPanel()"></wrd-icon>
+    <wrd-tooltip label="Tags">
+        <wrd-tag-picker post="<?php echo get_the_ID() ?>"></wrd-tag-picker>
     </wrd-tooltip>
 
     <wrd-tooltip label="Delete PopBot">
@@ -40,73 +40,53 @@ $popbot = new popBot(get_the_ID());
 <wrd-container>
     <div class="wrd-row">
 
+        <main class="wrd-col-12 wrd-col-lg-6 wrd-col-xl-8">
+            <h2 class="wrd-h2">Edit</h2>
+
+            <div class="wrd-section" style="padding:0;">
+                <wrd-panel-opener icon="palette" label="Appearance">
+                    <wrd-appearance-panel id="appearancePanel" value="<?php echo $popbot->getTemplate(); ?>"></wrd-appearance-panel>
+                </wrd-panel-opener>
+
+                <wrd-panel-opener icon="plumbing" label="Trigger">
+                    <wrd-trigger-panel id="triggerPanel" value='<?php echo $popbot->getTrigger(); ?>'></wrd-trigger-panel>
+                </wrd-panel-opener>
+
+                <wrd-panel-opener icon="rule" label="Conditions">
+                    <wrd-conditions-panel id="conditionsPanel" value='<?php echo $popbot->getConditions(); ?>'></wrd-conditions-panel>
+                </wrd-panel-opener>
+
+                <wrd-panel-opener icon="lock_clock" label="Visibility">
+                    <wrd-visibility-panel id="visibilityPanel" value='<?php echo $popbot->getVisibility(); ?>'></wrd-visibility-panel>
+                </wrd-panel-opener>
+
+                <wrd-panel-opener icon="data_array" label="Display Inline">
+                    <wrd-panel header="Display Inline">
+                        <div class="wrd-p">
+                            <wrd-input readonly label="Shortcode" value="<?php echo $popbot->getShortcode() ?>"></wrd-input>
+
+                            <p>
+                                Add your PopBot as static features on a page.
+                            </p>
+
+                            <ol>
+                                <li>PopBots added by shortcode can still appear on pages without the shortcode.</li>
+                                <li>Trigger must still fire & conditions must still be met to be visible.</li>
+                                <li>Inline PopBots don't care if other bots are showing.</li>
+                            </ol>
+                        </div>
+                    </wrd-panel>
+                </wrd-panel-opener>
+            </div>
+        </main>
+
         <aside class="wrd-col">
+            <h2 class="wrd-h2">Preview</h2>
+
             <div class="wrd-section">
                 <wrd-bot-preview post="<?php echo get_the_ID() ?>" scale="0.75" show-errors show-controls style="min-height: 50vh;"></wrd-bot-preview>
-
-                <wrd-tag-picker post="<?php echo get_the_ID() ?>"></wrd-tag-picker>
-            </div>
-
-            <div class="wrd-section wrd-mt">
-                <h3>
-                    <wrd-icon icon="data_array" label="Display Inline" style="--fill: #ADBAC2"></wrd-icon>
-                </h3>
-
-                <p>
-                    Add your PopBot as static features on a page.
-                </p>
-
-                <wrd-input readonly label="Shortcode" value="<?php echo $popbot->getShortcode() ?>"></wrd-input>
-
-                <ol>
-                    <li>PopBots added by shortcode can still appear on pages without the shortcode.</li>
-                    <li>Trigger must still fire & conditions must still be met to be visible.</li>
-                    <li>Inline PopBots don't care if other bots are showing.</li>
-                </ol>
             </div>
         </aside>
-
-        <main class="wrd-col-12 wrd-col-lg-6 wrd-col-xl-8">
-
-            <button type="button" onclick="window.appearancePanel.openPanel()" class="wrd-section wrd-mb">
-                <h2>
-                    <wrd-icon icon="palette" label="Customise Appearance" style="--fill: #ADBAC2"></wrd-icon>
-                </h2>
-
-                <p>
-                    Make design decisions and customise the content of your pop-up so that it fits your website and brand perfectly.
-                </p>
-
-                <wrd-panel-indicator for="appearancePanel" type="text"></wrd-panel-indicator>
-            </button>
-
-
-            <button type="button" onclick="window.triggerPanel.openPanel()" class="wrd-section wrd-mb">
-                <h2>
-                    <wrd-icon icon="plumbing" label="Choose a Trigger" style="--fill: #ADBAC2"></wrd-icon>
-                </h2>
-
-                <p>
-                    When a user performs a certain action your PopBot will attempt to show, as long as all it's conditions are met.
-                </p>
-
-                <wrd-panel-indicator for="triggerPanel" type="trigger"></wrd-panel-indicator>
-            </button>
-
-
-            <button type="button" onclick="window.conditionsPanel.openPanel()" class="wrd-section wrd-mb">
-                <h2>
-                    <wrd-icon icon="checklist" label="Manage Conditions" style="--fill: #ADBAC2"></wrd-icon>
-                </h2>
-
-                <p>
-                    Limit the instances when a PopBot can fired. You can create rules based on the user, time of day and many more.
-                </p>
-
-                <wrd-panel-indicator for="conditionsPanel" label="Conditions active"></wrd-panel-indicator>
-            </button>
-
-        </main>
 
     </div>
 </wrd-container>

@@ -49,7 +49,8 @@ button.wrd-section{
 button.wrd-section:hover{
     box-shadow: 0 25px 50px -12px rgb(254 206 246 / 0.6);
 }
-.wrd-section h2 {
+.wrd-section h2,
+.wrd-h2{
     font-size: 1.5rem;
     line-height: 2rem;
     font-weight: 500;
@@ -57,7 +58,8 @@ button.wrd-section:hover{
     padding: 0;
     margin-bottom: 1rem 
 }
-.wrd-section h3 {
+.wrd-section h3,
+.wrd-h3{
     font-size: 1.25rem;
     line-height: 1.75rem;
     font-weight: 500;
@@ -242,6 +244,9 @@ button.wrd-section:hover{
 }
 .wrd-mb{
     margin-bottom: 2rem;
+}
+.wrd-p{
+    padding: 1.5rem;
 }
 .wrd-row {
     --gutter: 2rem;

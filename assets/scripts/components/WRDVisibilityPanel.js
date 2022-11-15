@@ -16,6 +16,16 @@ export class WRDVisibilityPanel extends WRDPanelInterface {
         end: null,
     };
 
+    getChip() {
+        if (this.value.visibility == "public") return false;
+
+        return {
+            label: this.value.visibility,
+            icon: "visibility",
+            color: "#C60295",
+        }
+    }
+
     _onChange(e) {
         this.value[e.target.name] = e.target.value;
     }

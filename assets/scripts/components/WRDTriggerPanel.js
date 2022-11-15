@@ -33,6 +33,16 @@ export class WRDTriggerPanel extends WRDPanelInterface {
         threshold: null,
     };
 
+    getChip() {
+        if (!this.trigger) return false;
+
+        return {
+            label: this.trigger.label,
+            icon: this.trigger.icon,
+            color: this.trigger.color,
+        }
+    }
+
     firstUpdated() {
         const optionsWrapper = this.renderRoot.querySelector(".options");
 

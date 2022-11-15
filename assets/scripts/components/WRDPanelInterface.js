@@ -37,6 +37,8 @@ export class WRDPanelInterface extends LitElement {
         return root;
     }
 
+    getChip() { return false; }
+
     isOpen() { return this.renderRoot.querySelector("#panel").isOpen(); }
 
     openPanel() { return this.renderRoot.querySelector("#panel").openPanel(); }

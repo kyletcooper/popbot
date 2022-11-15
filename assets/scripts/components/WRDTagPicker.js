@@ -115,10 +115,6 @@ export class WRDTagPicker extends LitElement {
             gap: 0.5rem;
         }
 
-        .add{
-            --size: 36px;
-        }
-
         .tag{
             position: relative;
             padding: 0.2rem 0.75rem;

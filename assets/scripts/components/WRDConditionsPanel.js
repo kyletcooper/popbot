@@ -12,6 +12,18 @@ export class WRDConditionsPanel extends WRDPanelInterface {
     static key = "conditions";
     static defaultValue = [];
 
+    getChip() {
+        if (!this.value || !this.value.length) return false;
+
+        return {
+            label: `${this.value.length} Conditions`,
+            icon: "task_alt",
+            color: "#C60295",
+        }
+    }
+
+
+
     connectedCallback() {
         super.connectedCallback();
 

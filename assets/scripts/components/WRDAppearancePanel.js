@@ -15,6 +15,14 @@ export class WRDAppearancePanel extends WRDPanelInterface {
     static key = "template";
     static defaultValue = "";
 
+    getChip() {
+        return {
+            label: this.value,
+            icon: "dashboard",
+            color: "#C60295",
+        }
+    }
+
     constructor() {
         super();
 
