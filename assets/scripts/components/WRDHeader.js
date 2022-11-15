@@ -15,17 +15,31 @@ export class WRDHeader extends LitElement {
             z-index: 10;
 
             height: 85px;
+            overflow: hidden;
 
             background: white;
             box-shadow: 0 10px 15px -3px rgb(254 206 246 / 0.3), 0 4px 6px -4px rgb(254 206 246 / 0.3);
         }
 
+        @media screen and (max-width: 782px){
+            .header{
+                top: 46px;
+            }
+        }
+
+        @media screen and (max-width: 600px){
+            .header{
+                top: 0;
+            }
+        }
+
         .container{
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             gap: 1.5rem;
+            align-items: center;
             height: 100%;
+            max-width: 100%;
         }
 
         .title{
@@ -35,10 +49,16 @@ export class WRDHeader extends LitElement {
             color: rgb(15 23 42);
         }
 
-        .slot{
-            display: flex;
-            gap: 0.5rem;
-            margin-left: auto;
+        .actions{
+            display: none;
+        }
+
+        @media (min-width: 726px){
+            .actions{
+                display: flex;
+                gap: 0.5rem;
+                margin-left: auto;
+            }
         }
     `;
 
@@ -62,7 +82,7 @@ export class WRDHeader extends LitElement {
                             ${this.label}
                         </h1>
 
-                        <div class="slot">
+                        <div class="actions">
                             <slot></slot>
                         </div>
                         
