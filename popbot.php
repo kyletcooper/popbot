@@ -114,9 +114,6 @@ class Popbot_Plugin
 
     public static function register_endpoints()
     {
-        @ini_set('display_errors', 1);
-        add_filter('doing_it_wrong_trigger_error', '__return_true', PHP_INT_MAX);
-
         require_once static::PLUGIN_DIR . '/src/route-analytics.php';
         require_once static::PLUGIN_DIR . '/src/route-templates.php';
         require_once static::PLUGIN_DIR . '/src/route-options.php';
