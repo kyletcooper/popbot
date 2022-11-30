@@ -448,6 +448,22 @@ class Popbot
         echo $html;
     }
 
+    function render_visibile($classes = ''): void
+    {
+        $template = $this->get_template_object();
+
+        $this->_set_blog();
+        $content = $template->get_html($this->post_id);
+        $this->_reset_blog();
+
+        $wrapper = "<div class='popbot-container $classes' id='%s'>%s</div>";
+        $html = sprintf($wrapper, $this->get_uuid(), $content);
+
+        $template->enqueue_assets();
+
+        echo $html;
+    }
+
 
 
 

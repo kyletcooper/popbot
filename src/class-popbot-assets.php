@@ -4,7 +4,7 @@ namespace popbot;
 
 class Popbot_Assets
 {
-    const DEFERRED_SCRIPTS = ['popbot'];
+    const DEFERRED_SCRIPTS = ['popbot', 'popbot-editor'];
 
     public static function init()
     {
