@@ -2,47 +2,14 @@
 
 namespace popbot;
 
-$categoriesCustom = template::getAllCategorised("uploads");
-$categoriesDefault = template::getAllCategorised("native");
-
-function pb_templates_display_cats($categories, $show_new = false)
-{
-    if (!$categories) return false;
-
-    foreach ($categories as $cat) : ?>
-
-        <h3>
-            <?php echo ucwords($cat["label"]) ?>
-        </h3>
-
-        <div class="wrd-4col wrd-mb">
-            <?php foreach ($cat["items"] as $part) : ?>
-
-                <wrd-tooltip label="<?php esc_attr_e("Create PopBot from Template", 'popbot') ?>">
-
-                    <a href="<?php esc_attr_e(action::get("popbot_createBot")->getLink(["template" => $part->slug])) ?>" class="wrd-template-link">
-
-                        <?php $is_new = array_key_exists(sanitize_title($part->slug), $_GET) && $_GET[sanitize_title($part->slug)] == 1 && $show_new; ?>
-                        <wrd-part-preview class="<?php echo $is_new ? "wrd-success-pop" : null ?>" key="<?php echo $part->slug ?>" part="<?php echo $part->slug ?>" name="<?php echo $part->details['name'] ?>" image="<?php echo $part->image ?>"></wrd-part-preview>
-
-                    </a>
-
-                </wrd-tooltip>
-
-            <?php endforeach; ?>
-        </div>
-
-<?php endforeach;
-
-    return true;
-}
+$categoriesCustom = Popbot_Template::get_all("uploads");
 
 ?>
 
-<wrd-header back label="Choose a Template"></wrd-header>
+<nav-bar back label="Choose a Template"></nav-bar>
 
 
-<wrd-container id="popbot">
+<div id="popbot" class="wrd-container">
 
     <?php /*
     <div class="wrd-row">
@@ -114,22 +81,13 @@ function pb_templates_display_cats($categories, $show_new = false)
     */ ?>
 
 
-    <div class="wrd-row">
-        <div class="wrd-col">
-            <div class="wrd-section">
-                <h2>
-                    <wrd-icon icon="dashboard" label="Default Templates" style="--fill: #D204B0"></wrd-icon>
-                </h2>
-
-                <?php if (!pb_templates_display_cats($categoriesDefault)) : ?>
-
-                    <h3>Something went wrong.</h3>
-                    <p>We couldn't find any built-in templates.</p>
-
-                <?php endif; ?>
-            </div>
-        </div>
+    <div class="wrd-section wrd-mt">
+        <template-picker>
+            <h2>
+                <icon-label icon="dashboard" label="Default Templates" style="--fill: #D204B0"></icon-label>
+            </h2>
+        </template-picker>
     </div>
 
 
-</wrd-container>
+</div>

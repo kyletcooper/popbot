@@ -1,36 +1,47 @@
 // const defaultGutenbergConfig = require("@wordpress/scripts/config/webpack.config");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
 const path = require('path');
-var glob = require('glob');
+// var glob = require('glob');
 
 
-var componentsConfig = {
+var public = {
     mode: "production",
     watch: true,
 
-    entry: glob.sync('./assets/scripts/components/*.js'),
+    entry: path.resolve(__dirname, 'assets/scripts/src/public.js'),
 
     output: {
-        filename: 'components.js',
+        filename: 'public.js',
         path: path.resolve(__dirname, 'assets/scripts/dist/'),
     },
 };
 
 
-
-var mainConfig = {
+var admin = {
     mode: "production",
     watch: true,
 
-    entry: glob.sync('./assets/scripts/src/*.js'),
+    entry: path.resolve(__dirname, 'assets/scripts/src/admin.js'),
 
     output: {
-        filename: 'popbot.js',
+        filename: 'admin.js',
         path: path.resolve(__dirname, 'assets/scripts/dist/'),
     },
 };
 
+
+var editor = {
+    mode: "production",
+    watch: true,
+
+    entry: path.resolve(__dirname, 'assets/scripts/src/editor.js'),
+
+    output: {
+        filename: 'editor.js',
+        path: path.resolve(__dirname, 'assets/scripts/dist/'),
+    },
+};
 
 
 // var gutenbergConfig = {
@@ -60,5 +71,4 @@ var mainConfig = {
 // };
 
 
-
-module.exports = [mainConfig, componentsConfig];
+module.exports = [public, admin, editor];

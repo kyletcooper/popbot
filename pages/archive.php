@@ -5,21 +5,21 @@ namespace popbot;
 ?>
 
 
-<wrd-header label="<?php _e("All Popbots", 'popbot') ?>" back>
-    <wrd-tooltip label="<?php _e("Create new Popbot", 'popbot') ?>">
-        <a href="<?php echo page::get("popbot-templates")->getLink() ?>" aria-label="<?php _e("Create new Popbot", 'popbot') ?>">
-            <wrd-icon button icon="add"></wrd-icon>
+<nav-bar label="<?php _e("All Popbots", 'popbot') ?>" back>
+    <tool-tip label="<?php _e("Create new Popbot", 'popbot') ?>">
+        <a href="<?php echo esc_url(Admin_Page::get("popbot-templates")->get_link()) ?>" aria-label="<?php _e("Create new Popbot", 'popbot') ?>">
+            <icon-label button icon="add"></icon-label>
         </a>
-    </wrd-tooltip>
-</wrd-header>
+    </tool-tip>
+</nav-bar>
 
 
-<wrd-container id="popbot">
+<div id="popbot" class="wrd-container">
     <div class="wrd-row">
         <div class="wrd-col">
             <section class="wrd-section wrd-section__clear">
-                <wrd-post-archive post-type="popbot"></wrd-post-archive>
+                <post-archive post-type="popbot"></post-archive>
             </section>
         </div>
     </div>
-</wrd-container>
+</div>

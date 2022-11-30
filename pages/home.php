@@ -4,21 +4,23 @@ namespace popbot;
 
 ?>
 
-<header id="hero" style="background-image: url('<?php echo popBotPlugin::PLUGIN_URL . '/assets/images/bg.png' ?>')">
-    <wrd-container>
-        <h1>PopBot</h1>
-        <p>Conversions made easy.</p>
-    </wrd-container>
+<header id="hero" class="wrd-hero" style="background-image: url('<?php esc_attr_e(Popbot_Plugin::PLUGIN_URL . '/assets/images/bg.png') ?>')">
+    <div class="wrd-container">
+        <div class="wrd-p">
+            <h1>PopBot</h1>
+            <p>Conversions made easy.</p>
+        </div>
+    </div>
 </header>
 
 
-<wrd-container id="popbot">
+<div id="popbot" class="wrd-container">
 
     <div class="wrd-row">
         <div class="wrd-col">
             <div class="wrd-section wrd-section__clear">
                 <h2>
-                    <wrd-icon icon="sms_failed" label="Your PopBots" style="--fill: #D204B0"></wrd-icon>
+                    <icon-label icon="sms_failed" label="Your PopBots" style="--fill: #D204B0"></icon-label>
                 </h2>
 
                 <p>
@@ -28,36 +30,35 @@ namespace popbot;
 
                 <?php
 
-                $bots = popBot::query([
+                $bots = Popbot::query([
                     "post_status" => "any",
-                    "numberposts" => 10,
+                    "per_page" => 6,
                     "orderby" => "post_modified",
                     "order" => "DESC",
                 ]);
 
                 if ($bots) : ?>
 
-                    <div class="wrd-3col">
+                    <div class="wrd-row">
                         <?php foreach ($bots as $bot) : ?>
 
-                            <wrd-bot post_id="<?php echo $bot->getPostID() ?>"></wrd-bot>
+                            <div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
+                                <partial-bot uuid="<?php esc_attr_e($bot->get_uuid()) ?>"></partial-bot>
+                            </div>
 
                         <?php endforeach; ?>
                     </div>
                 <?php else : ?>
 
-                    <div class="wrd-empty">
+                    <div class="wrd-empty wrd-mt">
                         <div>
-                            <?php wp_nonce_field("pb_home_create") ?>
-                            <input type="hidden" name="action" value="pb_home_create" />
-
                             <h3>
                                 You haven't created any PopBots
                             </h3>
 
-                            <a href="<?php esc_attr_e(page::get("popbot-templates")->getLink()) ?>" class="wrd-button" style="width: fit-content;">
-                                <wrd-icon icon="add_circle" label="Create your First PopBot" style="--fill: #ADBAC2"></wrd-icon>
-                                <wrd-icon icon="arrow_forward"></wrd-icon>
+                            <a href="<?php esc_attr_e(Admin_Page::get("popbot-templates")->get_link()) ?>" class="wrd-button" style="margin-bottom: 0;">
+                                <icon-label icon="add_circle" label="Create your First PopBot"></icon-label>
+                                <icon-label icon="arrow_forward"></icon-label>
                             </a>
                         </div>
 
@@ -86,30 +87,36 @@ namespace popbot;
         <div class="wrd-col">
             <div class="wrd-section wrd-section__clear">
                 <h2>
-                    <wrd-icon icon="grade" label="Your Actions" style="--fill: #D204B0"></wrd-icon>
+                    <icon-label icon="grade" label="Your Actions" style="--fill: #D204B0"></icon-label>
                 </h2>
 
                 <p>
                     Quickly navigated around the PopBot plugin.
                 </p>
 
-                <div class="wrd-3col">
-                    <a href="<?php esc_attr_e(page::get("popbot-templates")->getLink()); ?>" class="wrd-button">
-                        <wrd-icon icon="add_circle" label="Create new PopBot" style="--fill: #ADBAC2"></wrd-icon>
-                        <wrd-icon icon="arrow_forward"></wrd-icon>
-                    </a>
+                <div class="wrd-row">
+                    <div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
+                        <a class="wrd-button" style="width: 100%" href="<?php esc_attr_e(Admin_Page::get("popbot-templates")->get_link()); ?>">
+                            <icon-label icon="add_circle" label="Create new PopBot"></icon-label>
+                            <icon-label icon="arrow_forward"></icon-label>
+                        </a>
+                    </div>
 
-                    <a class="wrd-button" href="<?php esc_attr_e(page::get("popbot-archive")->getLink()); ?>">
-                        <wrd-icon icon="apps" label="View all PopBots" style="--fill: #ADBAC2"></wrd-icon>
-                        <wrd-icon icon="arrow_forward"></wrd-icon>
-                    </a>
+                    <div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
+                        <a class="wrd-button" style="width: 100%" href="<?php esc_attr_e(Admin_Page::get("popbot-archive")->get_link()); ?>">
+                            <icon-label icon="apps" label="View all PopBots"></icon-label>
+                            <icon-label icon="arrow_forward"></icon-label>
+                        </a>
+                    </div>
 
                     <?php /*
 
-                    <a class="wrd-button wrd-premium" href="https://webresultsdirect.com" target="_blank">
-                        <wrd-icon icon="verified" label="Upgrade to Premium" style="--fill: #ADBAC2"></wrd-icon>
-                        <wrd-icon icon="arrow_forward"></wrd-icon>
-                    </a>
+                    <div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
+                        <a class="wrd-button wrd-premium" href="https://wrd.studio" target="_blank">
+                            <icon-label icon="verified" label="Upgrade to Premium"></icon-label>
+                            <icon-label icon="arrow_forward"></icon-label>
+                        </a>
+                    </div>
 
                     */ ?>
                 </div>
@@ -120,43 +127,22 @@ namespace popbot;
 
     <div class="wrd-row">
         <div class="wrd-col">
-            <div class="wrd-section wrd-section__clear">
+            <div class="wrd-section wrd-section__clear wrd-mt">
                 <h2>
-                    <wrd-icon icon="insights" label="Your Analytics" style="--fill: #D204B0"></wrd-icon>
+                    <icon-label icon="insights" label="Your Analytics" style="--fill: #D204B0"></icon-label>
                 </h2>
 
                 <p>
                     Keep track of how PopBots are driving your conversions and how users are responding to them.
                 </p>
 
-                <div class="wrd-section">
-                    <wrd-graph event_type="shown"></wrd-graph>
+                <div class="wrd-section wrd-mt">
+                    <div class="wrd-row" style="margin-top: -1.5rem;">
+                        <?php foreach (["shown", "converted", "dismissed"] as $event_type) : ?>
 
-                    <div class="wrd-3col" style="margin-top: 2rem">
-                        <?php
-
-                        $event_types = [
-                            "Total Views" => "shown",
-                            "Conversions" => "converted",
-                            "Dismissed" => "dismissed"
-                        ];
-
-                        foreach ($event_types as $label => $event_type) :
-                            $curr_month = analytics::getEventsCount([
-                                "event_type" => $event_type,
-                                "date_start" => date('01-m-Y'), // Start of this month
-                                "date_end" => date('t-m-Y'), // End of this month
-                            ]);
-
-                            $prev_month = analytics::getEventsCount([
-                                "event_type" => $event_type,
-                                "date_start" => date('Y-m-01', strtotime('-1 MONTH')),
-                                "date_end" => date('Y-m-t', strtotime('-1 MONTH')),
-                            ]);
-
-                        ?>
-
-                            <wrd-statistic value="<?php esc_attr_e($curr_month) ?>" previous="<?php esc_attr_e($prev_month) ?>" date="<?php esc_attr_e(date("F, Y")) ?>"><?php esc_html_e($label) ?></wrd-statistic>
+                            <div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
+                                <stat-scorecard event_type="<?php esc_attr_e($event_type) ?>"></stat-scorecard>
+                            </div>
 
                         <?php endforeach; ?>
                     </div>
@@ -166,4 +152,4 @@ namespace popbot;
         </div>
     </div>
 
-</wrd-container>
+</div>

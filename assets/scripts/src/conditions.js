@@ -1,16 +1,4 @@
-const getCookie = (name) => {
-    const cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookieArr = cookies[i].split("=");
-        if (name == cookieArr[0].trim()) {
-            return decodeURIComponent(cookieArr[1]);
-        }
-    }
-
-    return null;
-};
-
+import { cookie } from './utils';
 
 window.popbot.conditions = [
     {
@@ -83,38 +71,38 @@ window.popbot.conditions = [
     //     id: "user.location.region",
     //     label: "Region",
     //     category: "Geolocation",
-    //     value: getCookie('popBot_geolocation_region'),
+    //     value: cookie.get('popBot_geolocation_region'),
     // },
     // {
     //     id: "user.location.continent",
     //     label: "Continent",
     //     category: "Geolocation",
-    //     value: getCookie('popBot_geolocation_continent'),
+    //     value: cookie.get('popBot_geolocation_continent'),
     // },
     // {
     //     id: "user.location.country",
     //     label: "Country",
     //     category: "Geolocation",
-    //     value: getCookie('popBot_geolocation_country'),
+    //     value: cookie.get('popBot_geolocation_country'),
     // },
     // {
     //     id: "user.location.city",
     //     label: "City",
     //     category: "Geolocation",
-    //     value: getCookie('popBot_geolocation_city'),
+    //     value: cookie.get('popBot_geolocation_city'),
     // },
 
     {
         id: "user.journey.referrer",
         label: "Referrer",
         category: "User Journey",
-        value: getCookie("popBot_journey_referrer"),
+        value: cookie.get("popBot_journey_referrer"),
     },
     {
         id: "user.journey.returning",
         label: "Is Returning",
         category: "User Journey",
-        value: getCookie("popBot_journey_returning"),
+        value: cookie.get("popBot_journey_returning"),
         options: [
             {
                 id: '0',
@@ -130,7 +118,7 @@ window.popbot.conditions = [
         id: "user.journey.landing",
         label: "Is First Page",
         category: "User Journey",
-        value: getCookie("popBot_journey_landing"),
+        value: cookie.get("popBot_journey_landing"),
         options: [
             {
                 id: '0',
@@ -146,14 +134,14 @@ window.popbot.conditions = [
         id: "user.journey.pageCount",
         label: "Pages Count",
         category: "User Journey",
-        value: getCookie("popBot_journey_pageCount"),
+        value: cookie.get("popBot_journey_pageCount"),
     },
 
     {
         id: "post.isFrontPage",
         label: "Is Front Page",
         category: "Post",
-        value: window.popbot?.condition_values['post.isFrontPage'] ? 1 : 0,
+        value: window.popbot.serverConditions['post.isFrontPage'] ? 1 : 0,
         options: [
             {
                 id: '0',
@@ -170,63 +158,63 @@ window.popbot.conditions = [
         id: "post.ID",
         label: "Post ID",
         category: "Post",
-        value: window.popbot?.condition_values['post.ID'],
+        value: window.popbot.serverConditions['post.ID'],
     },
     {
         id: "post.title",
         label: "Title",
         category: "Post",
-        value: window.popbot?.condition_values['post.title'],
+        value: window.popbot.serverConditions['post.title'],
     },
     {
         id: "post.type",
         label: "Post Type",
         category: "Post",
-        value: window.popbot?.condition_values['post.type'],
+        value: window.popbot.serverConditions['post.type'],
     },
     {
         id: "post.author",
         label: "Author",
         category: "Post",
-        value: window.popbot?.condition_values['post.author'],
+        value: window.popbot.serverConditions['post.author'],
     },
 
     {
         id: "date.time",
         label: "Unix Time",
         category: "Time",
-        value: window.popbot?.condition_values['date.time'],
+        value: window.popbot.serverConditions['date.time'],
     },
     {
         id: "date.dayOfWeek",
         label: "Day of the Week",
         category: "Time",
-        value: window.popbot?.condition_values['date.dayOfWeek'],
+        value: window.popbot.serverConditions['date.dayOfWeek'],
     },
     {
         id: "date.date",
         label: "Date",
         category: "Time",
-        value: window.popbot?.condition_values['date.date'],
+        value: window.popbot.serverConditions['date.date'],
     },
     {
         id: "date.month",
         label: "Month",
         category: "Time",
-        value: window.popbot?.condition_values['date.month'],
+        value: window.popbot.serverConditions['date.month'],
     },
     {
         id: "date.year",
         label: "Year",
         category: "Time",
-        value: window.popbot?.condition_values['date.year'],
+        value: window.popbot.serverConditions['date.year'],
     },
 
     {
         id: "user.wp.isLoggedIn",
         label: "Is Logged In",
         category: "WordPress User",
-        value: window.popbot?.condition_values["user.wp.isLoggedIn"] ? 1 : 0,
+        value: window.popbot.serverConditions["user.wp.isLoggedIn"] ? 1 : 0,
         options: [
             {
                 id: '0',
@@ -242,13 +230,13 @@ window.popbot.conditions = [
         id: "user.wp.login",
         label: "Username",
         category: "WordPress User",
-        value: window.popbot?.condition_values["user.wp.login"],
+        value: window.popbot.serverConditions["user.wp.login"],
     },
     {
         id: "user.wp.roles",
         label: "Roles",
         category: "WordPress User",
-        value: window.popbot?.condition_values["user.wp.roles"],
+        value: window.popbot.serverConditions["user.wp.roles"],
     },
 
     {

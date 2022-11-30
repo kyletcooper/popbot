@@ -4,7 +4,7 @@ namespace popbot;
 
 add_filter('show_admin_bar', '__return_false');
 
-remove_action("wp_body_open", ['popbot\\popbotPlugin', 'renderAll']);
+remove_action("wp_body_open", ['popbot\\popbotPlugin', 'render_all']);
 
 ?>
 
@@ -21,22 +21,20 @@ remove_action("wp_body_open", ['popbot\\popbotPlugin', 'renderAll']);
         <?php
 
         $part_name = $_GET['part'] ?? "";
-        $post_id = $_GET['post'] ?? -1;
+        $post_uuid = $_GET['post'] ?? -1;
 
-        $post = get_post($post_id);
-
-        if (!$part_name && $post) {
-            $popbot = new popBot($post_id);
-            $part_name = $popbot->getTemplate();
+        if (!$part_name && $post_uuid) {
+            $popbot = Popbot::from_uuid($post_uuid);
+            $part_name = $popbot->get_template();
         }
 
-        $part = new template($part_name);
-        echo $part->getHTML($post_id);
+        $part = new Popbot_Template($part_name);
+        echo $part->get_html($post_uuid);
 
         ?>
 
         <style>
-            <?php echo $part->getCSS($post_id); ?>
+            <?php echo strip_tags($part->get_css()); ?>
         </style>
     </main>
 
