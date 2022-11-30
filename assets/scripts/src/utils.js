@@ -23,7 +23,7 @@ export const debug = {
 }
 
 export const api = async function (endpoint, args = {}, method = "GET") {
-    let url = new URL(`${window.popbot.home_url}/wp-json/${endpoint}`);
+    let url = new URL(`${window.popbot.home_url}/wp-json${endpoint}`);
 
     let opts = {
         method: method,

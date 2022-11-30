@@ -50,7 +50,7 @@ export class PreviewBot extends LitElement {
     }
 
     async refreshErrors() {
-        const bot = await api(`popbot/v1/popbots/${this.uuid}`, { _fields: 'errors' });
+        const bot = await api(`/popbot/v1/popbots/${this.uuid}`, { _fields: 'errors' });
         this.errors = bot.errors;
     }
 

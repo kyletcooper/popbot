@@ -15,7 +15,7 @@ export class PanelCustomCondition extends PanelInterface {
     };
 
     static key = false;
-    static route = 'popbot/v1/custom-conditions/';
+    static route = '/popbot/v1/custom-conditions/';
     static defaultValue = {
         "title": "New Custom Condition",
         "callback": "return 1;",

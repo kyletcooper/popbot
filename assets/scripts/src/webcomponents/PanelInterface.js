@@ -9,7 +9,7 @@ export class PanelInterface extends LitElement {
         value: { type: Object, state: true },
     };
 
-    static route = 'popbot/v1/popbots/';
+    static route = '/popbot/v1/popbots/';
     static key = undefined;
     static defaultValue = {};
 

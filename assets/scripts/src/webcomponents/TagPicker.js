@@ -80,7 +80,7 @@ export class TagPicker extends LitElement {
         let ids = this.postTags.map(tag => tag.id);
         data[this.taxonomy] = ids;
 
-        const res = await api(`wp/v2/${this.postType}/${this.post}`, data, "POST");
+        const res = await api(`/wp/v2/${this.postType}/${this.post}`, data, "POST");
     }
 
 
