@@ -30,8 +30,8 @@ export class TagPicker extends LitElement {
     }
 
     async _getTags() {
-        this.allTags = await api(`wp/v2/${this.taxonomy}`);
-        this.postTags = await api(`wp/v2/${this.taxonomy}`, { post: this.post });
+        this.allTags = await api(`/wp/v2/${this.taxonomy}`);
+        this.postTags = await api(`/wp/v2/${this.taxonomy}`, { post: this.post });
     }
 
     _onKeyDown(e) {
