@@ -325,7 +325,7 @@ class pobBotDebugger {
 
         cookies.forEach(c => {
             const name = c.split("=")[0];
-            window.popbot.manager.cookie.set(name, '');
+            document.cookie = `${name}=;`;
         });
 
         this.animBtnSuccess(e.target);
