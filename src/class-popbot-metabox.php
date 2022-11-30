@@ -202,14 +202,9 @@ class Popbot_Metabox
 
         foreach ($inputs as $input) {
             $key = $input['slug'];
-            $old_value = get_post_meta($post_id, $key, true);
             $new_value = sanitize_text_field($_POST[$key]) ?? '';
 
-            if ($new_value && $new_value != $old_value) {
-                update_post_meta($post_id, $key, $new_value);
-            } elseif ('' == $new_value && $old_value) {
-                delete_post_meta($post_id, $key, $old_value);
-            }
+            update_post_meta($post_id, $key, $new_value);
         }
     }
 }
