@@ -84,7 +84,7 @@ class Admin_Page
 
         if ($this->hidden) {
             add_action('admin_footer', function () {
-                echo "<style>#adminmenu .wp-submenu a[href*='" . esc_attr_e($this->slug) . "']{display: none;}</style>";
+                echo "<style>#adminmenu .wp-submenu a[href*='" . esc_attr($this->slug) . "']{display: none;}</style>";
             });
         }
     }
