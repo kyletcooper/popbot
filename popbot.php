@@ -49,6 +49,11 @@ class Popbot_Plugin
     {
         static::includes();
 
+        if (Popbot_Options::get('popbot_require_rewrite_rules_flush')) {
+            Popbot_Options::set('popbot_require_rewrite_rules_flush', false);
+            flush_rewrite_rules();
+        }
+
         Popbot_Assets::init();
         Popbot::init();
         Custom_Condition::init();
@@ -177,15 +182,16 @@ class Popbot_Plugin
 
     static function activate(): void
     {
-        require_once static::PLUGIN_DIR . '/src/analytics.class.php';
+        static::includes();
         Popbot_Analytics::create_table();
 
+        Popbot_Options::set('popbot_require_rewrite_rules_flush', true);
         Popbot_Options::set('popbot_version', self::VERSION);
     }
 
     static function uninstall(): void
     {
-        require_once static::PLUGIN_DIR . '/src/analytics.class.php';
+        static::includes();
         Popbot_Analytics::drop_table();
 
         foreach (Popbot_Options::OPTIONS_WHITELIST as $key => $default) {

@@ -9,6 +9,8 @@ class Popbot_Options
         'popbot_license' => '',
         'popbot_pro' => false,
 
+        'popbot_require_rewrite_rules_flush' => false,
+
         'popbot_config_timeBetweenPopups' => 5000,
         'popbot_config_allowReshow' => true,
     ];
