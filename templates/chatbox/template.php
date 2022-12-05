@@ -4,7 +4,7 @@ $profile_photo_id = popbot_setting("profile-photo");
 $profile_photo_url = wp_get_attachment_image_url($profile_photo_id, 'medium');
 
 if (!$profile_photo_url) {
-    $profile_photo_url = "https://webresultsdirect.com/wp-content/uploads/2022/09/Adrian_2-scaled-e1662476654613.jpg";
+    $profile_photo_url = popbot_template_url('/assistant.png');
 }
 
 ?>

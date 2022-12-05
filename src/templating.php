@@ -65,3 +65,31 @@ function the_popbot_action(string $content = '', string $action = 'dismiss'): vo
     // Sanitized in popbot_action()
     echo popbot_action($content, $action);
 }
+
+/**
+ * Gets the full URL to a template folder.
+ */
+function popbot_template_url(string $append = ''): string
+{
+    global $popbotCurrentTemplate;
+
+    if (!$popbotCurrentTemplate) {
+        return '';
+    }
+
+    return $popbotCurrentTemplate->get_url($append);
+}
+
+/**
+ * Gets the full path to a template folder.
+ */
+function popbot_template_dir(string $append = ''): string
+{
+    global $popbotCurrentTemplate;
+
+    if (!$popbotCurrentTemplate) {
+        return '';
+    }
+
+    return $popbotCurrentTemplate->get_dir($append);
+}
