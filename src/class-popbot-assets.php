@@ -21,7 +21,7 @@ class Popbot_Assets
     {
         $user = wp_get_current_user();
         $post_id = get_the_ID();
-        if (!$post_id) $post_id = $_GET['post'] ?? -1;
+        if (!$post_id) $post_id = array_key_exists('post', $_GET) ? intval($_GET['post']) : -1;
 
         return [
             'post_id'    => $post_id,

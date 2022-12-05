@@ -39,13 +39,11 @@ class Popbot_Template
         return $this->slug;
     }
 
-    function get_html($post_id = -1): string
+    function render_html($post_id = -1): bool
     {
         if (!$this->get_dir()) {
-            return '';
+            return false;
         }
-
-        ob_start();
 
         global $post;
         $post = get_post($post_id);
@@ -58,7 +56,7 @@ class Popbot_Template
 
         wp_reset_postdata();
 
-        return ob_get_clean();
+        return true;
     }
 
     function get_path(string $area_type, string $append = '')
@@ -281,5 +279,10 @@ class Popbot_Template
     {
         // NOT IMPLEMENTED.
         return new Popbot_Template("native/box");
+    }
+
+    static function sanitize_part_name($part_name): string
+    {
+        return preg_replace('[a-zA-Z\/]+', '', $part_name);
     }
 }

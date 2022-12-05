@@ -19,18 +19,15 @@ remove_action('wp_body_open', ['popbot\\Popbot', 'render_all']);
     <main id="popBotPreview">
         <?php
 
-        $part_name = $_GET['part'] ?? "";
-        $post_uuid = $_GET['post'] ?? -1;
-
-        $part_name = sanitize_text_field($part_name);
-        $post_uuid = sanitize_text_field($post_uuid);
+        $part_name = array_key_exists('part', $_GET) ? Popbot_Template::sanitize_part_name($_GET['part']) : "";
+        $post_uuid = array_key_exists('post', $_GET) ? Popbot::sanitize_uuid($_GET['post']) : -1;
 
         if (!$part_name && $post_uuid) {
             $popbot = Popbot::from_uuid($post_uuid);
             $popbot->render_visibile();
         } else {
             $part = new Popbot_Template($part_name);
-            echo $part->get_html($post_uuid);
+            $part->render_html($post_uuid);
             $part->enqueue_assets();
         }
 
@@ -56,7 +53,7 @@ remove_action('wp_body_open', ['popbot\\Popbot', 'render_all']);
 
             <?php
 
-            if ($_GET['scale'] ?? null) {
+            if (array_key_exists('scale', $_GET)) {
                 echo "transform: scale(" . floatval($_GET['scale']) . ");";
             }
 

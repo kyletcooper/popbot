@@ -108,17 +108,6 @@ namespace popbot;
                             <icon-label icon="arrow_forward"></icon-label>
                         </a>
                     </div>
-
-                    <?php /*
-
-                    <div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
-                        <a class="wrd-button wrd-premium" href="https://wrd.studio" target="_blank">
-                            <icon-label icon="verified" label="Upgrade to Premium"></icon-label>
-                            <icon-label icon="arrow_forward"></icon-label>
-                        </a>
-                    </div>
-
-                    */ ?>
                 </div>
             </div>
         </div>

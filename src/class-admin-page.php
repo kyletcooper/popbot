@@ -34,7 +34,7 @@ class Admin_Page
 
     function is_current_page()
     {
-        return isset($_GET['page']) && $_GET['page'] == $this->slug;
+        return array_key_exists('page', $_GET) && sanitize_text_field($_GET['page']) == $this->slug;
     }
 
     function _admin_init()

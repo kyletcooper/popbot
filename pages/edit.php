@@ -3,7 +3,7 @@
 namespace popbot;
 
 global $post;
-$post_id = $_GET["post"] ?? -1;
+$post_id = intval($_GET["post"]) ?? -1;
 $post = get_post($post_id);
 
 if (!setup_postdata($post)) {

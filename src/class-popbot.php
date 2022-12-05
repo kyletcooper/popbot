@@ -436,16 +436,15 @@ class Popbot
         $template = $this->get_template_object();
 
         $this->_set_blog();
-        $content = $template->get_html($this->post_id);
-        $this->_reset_blog();
 
-        $wrapper = "<div class='popbot-container $classes' id='%s' hidden inert>%s%s</div>";
-        $script = '<script>window.popbot.bots = window.popbot?.bots || []; window.popbot.bots.push(' . wp_json_encode($this->get_constructor_options()) . ')</script>';
-        $html = sprintf($wrapper, $this->get_uuid(), $content, $script);
-
+        echo '<div class="popbot-container ' . esc_attr($classes) . '" id="' . esc_attr($this->get_uuid()) . '" hidden inert>';
+        echo '<script>window.popbot.bots = window.popbot?.bots || []; window.popbot.bots.push(' . wp_json_encode($this->get_constructor_options()) . ')</script>';
+        $template->render_html($this->post_id);
         $template->enqueue_assets();
+        echo '</div>';
 
-        echo $html;
+
+        $this->_reset_blog();
     }
 
     function render_visibile($classes = ''): void
@@ -453,15 +452,13 @@ class Popbot
         $template = $this->get_template_object();
 
         $this->_set_blog();
-        $content = $template->get_html($this->post_id);
-        $this->_reset_blog();
 
-        $wrapper = "<div class='popbot-container $classes' id='%s'>%s</div>";
-        $html = sprintf($wrapper, $this->get_uuid(), $content);
-
+        echo '<div class="popbot-container ' . esc_attr($classes) . '" id="' . esc_attr($this->get_uuid()) . '">';
+        $template->render_html($this->post_id);
         $template->enqueue_assets();
+        echo '</div>';
 
-        echo $html;
+        $this->_reset_blog();
     }
 
 
@@ -671,5 +668,10 @@ class Popbot
                 $popBot->render();
             }
         }
+    }
+
+    public static function sanitize_uuid($uuid)
+    {
+        return preg_replace('/[^0-9_]+/', '', $uuid);
     }
 }
