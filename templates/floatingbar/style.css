@@ -1,33 +1,33 @@
 .pb-floatingbar{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    min-height: 3rem;
-    z-index: 999;
-    padding: 3rem;
-    border-radius: 0.2rem;
-    background-repeat: no-repeat;
-    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	min-height: 3rem;
+	z-index: 999;
+	padding: 3rem;
+	border-radius: 0.2rem;
+	background-repeat: no-repeat;
+	box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 }
 .pb-floatingbar-close{
-    position: absolute;
-    top: -4rem;
-    right: 1rem;
-    fill: currentColor;
-    transition: opacity 0.2s ease;
-    cursor: pointer;
+	position: absolute;
+	top: -4rem;
+	right: 1rem;
+	fill: currentColor;
+	transition: opacity 0.2s ease;
+	cursor: pointer;
 }
 .pb-floatingbar-close:hover,
 .pb-floatingbar-close:focus{
-    opacity: 0.8;
+	opacity: 0.8;
 }
 
 .pb-floatingbar-content > *:first-child{
-    margin-top: 0 !important;
+	margin-top: 0 !important;
 }
 .pb-floatingbar-content > *:last-child{
-    margin-bottom: 0 !important;
+	margin-bottom: 0 !important;
 }
 .pb-floatingbar-content h1:first-child,
 .pb-floatingbar-content h2:first-child,
@@ -35,26 +35,26 @@
 .pb-floatingbar-content h4:first-child,
 .pb-floatingbar-content h5:first-child,
 .pb-floatingbar-content h6:first-child{
-    margin-top: 0 !important;
+	margin-top: 0 !important;
 }
 
 .entering .pb-floatingbar{
-    animation: pb-floatingbar-enter 0.5s ease;
+	animation: pb-floatingbar-enter 0.5s ease;
 }
 
 .leaving .pb-floatingbar{
-    animation: pb-floatingbar-leave 0.3s ease forwards;
+	animation: pb-floatingbar-leave 0.3s ease forwards;
 }
 
 @keyframes pb-floatingbar-enter{
-    from{
-        transform: translateY(3rem);
-        opacity: 0;
-    }
+	from{
+		transform: translateY(3rem);
+		opacity: 0;
+	}
 }
 @keyframes pb-floatingbar-leave{
-    to{
-        transform: translateY(3rem);
-        opacity: 0;
-    }
+	to{
+		transform: translateY(3rem);
+		opacity: 0;
+	}
 }

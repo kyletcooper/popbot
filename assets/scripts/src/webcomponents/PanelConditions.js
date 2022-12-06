@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { css, html } from 'lit';
 import { PanelInterface } from './PanelInterface.js';
 import './PanelCustomConditions';
 import './OffCanvas';
@@ -32,7 +32,7 @@ export class PanelConditions extends PanelInterface {
         this.renderRoot.addEventListener('change', this._onChange.bind(this));
     }
 
-    _onChange(e) {
+    _onChange() {
         let value = [];
         let conditionsElements = this.renderRoot.querySelectorAll("condition-rule");
 

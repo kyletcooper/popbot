@@ -7,14 +7,14 @@ export class DatePicker extends LitElement {
         value: {
             type: Date,
             converter: {
-                fromAttribute: (value, type) => {
+                fromAttribute: value => {
                     if (!value) {
                         return null;
                     }
 
                     return new Date(value);
                 },
-                toAttribute: (value, type) => {
+                toAttribute: value => {
                     if (!value) {
                         return "";
                     }
@@ -114,7 +114,7 @@ export class DatePicker extends LitElement {
             );
         }
 
-        const getDateClasses = (date) => {
+        const getDateClasses = (d) => {
             let classes = "";
 
             if (d.getMonth() != monthIndex) classes += "out-of-month ";
@@ -256,9 +256,6 @@ export class DatePicker extends LitElement {
             border-collapse: collapse;
             border: none;
         }
-        .weekdays{
-
-        }
         .weekday{
             text-align: center;
             color: #64748b;
@@ -266,9 +263,6 @@ export class DatePicker extends LitElement {
             padding: 0.5rem;
         }
 
-        .week{
-            
-        }
         .dateWrapper{
             cursor: pointer;
 

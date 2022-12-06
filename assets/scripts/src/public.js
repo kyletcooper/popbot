@@ -1,5 +1,5 @@
 import { PopbotManager } from './popbot';
-import { setupCustomConditions, setupServerConditions, api } from './utils';
+import { setupCustomConditions, api } from './utils';
 
 window.api = api;
 
@@ -10,8 +10,7 @@ window.api = api;
         for (const opts of window.popbot.bots) {
             try {
                 window.popbot.manager.create(opts);
-            }
-            catch (e) {
+            } catch (e) {
                 console.error(null, e);
             }
         }
@@ -19,15 +18,3 @@ window.api = api;
 
     setupCustomConditions();
 })()
-
-// For the gutenberg Conditions format type.
-// It isn't a block type so it can't have it's own script file easily
-// document.querySelectorAll(".popbot-condition").forEach(el => {
-//     if (document.body.classList.contains('block-editor-page')) return;
-
-//     const tag = el.textContent;
-//     const condition = conditions.find(cond => cond.id == tag);
-
-//     el.textContent = condition?.value;
-//     el.style.opacity = 1;
-// });

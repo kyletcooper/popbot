@@ -45,7 +45,7 @@ export class InlineEditable extends LitElement {
         this.value = response.title;
     }
 
-    _onBlur(e) {
+    _onBlur() {
         this.save();
     }
 
@@ -54,7 +54,7 @@ export class InlineEditable extends LitElement {
         this.resize();
     }
 
-    _onFocus(e) {
+    _onFocus() {
         this.resize();
     }
 

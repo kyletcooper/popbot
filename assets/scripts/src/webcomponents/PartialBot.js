@@ -1,8 +1,8 @@
 import { LitElement, css, html } from 'lit';
 import { api } from '../utils';
 import '../triggers';
-import { PreviewBot } from './PreviewBot';
-import { IconLabel } from './IconLabel';
+import './PreviewBot';
+import './IconLabel';
 
 export class PartialBot extends LitElement {
     static properties = {

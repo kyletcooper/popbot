@@ -37,7 +37,7 @@ export class FloatingInput extends LitElement {
         this._internals = this.attachInternals();
         this._value = "";
 
-        this.addEventListener("focus", e => {
+        this.addEventListener("focus", () => {
             this._onFocus();
         })
 

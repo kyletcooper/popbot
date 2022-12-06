@@ -59,15 +59,12 @@ export class StatScorecard extends LitElement {
         switch (this.event_type) {
             case "shown":
                 return "Total Views";
-                break;
 
             case "converted":
                 return "Conversions";
-                break;
 
             case "dismissed":
                 return "Dismissals";
-                break;
         }
     }
 
@@ -85,7 +82,7 @@ export class StatScorecard extends LitElement {
     }
 
     get _changedClass() {
-        if (this.previous == 0 && false) {
+        if (this.previous == 0) {
             return "flat";
         }
         else if (this.current > this.previous) {

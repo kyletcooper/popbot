@@ -3,11 +3,11 @@
 namespace popbot;
 
 global $post;
-$post_id = intval($_GET["post"]) ?? -1;
-$post = get_post($post_id);
+$post_id = intval($_GET['post']) ?? -1; // phpcs:ignore -- This is not form data. Permission is checked before this template is loaded by WP Core.
+$post    = get_post($post_id);
 
 if (!setup_postdata($post)) {
-    wp_die(__("Post not found", 'popbot'));
+    wp_die(__('Post not found', 'popbot'));
 }
 
 $popbot = new Popbot(get_the_ID());
@@ -23,7 +23,7 @@ $popbot = new Popbot(get_the_ID());
 <nav-bar back>
     <inline-editable id="title" uuid="<?php esc_attr_e($popbot->get_uuid()); ?>" key="post_title" slot="title"></inline-editable>
 
-    <tag-picker post="<?php esc_attr_e(get_the_ID()) ?>"></tag-picker>
+    <tag-picker post="<?php esc_attr_e(get_the_ID()); ?>"></tag-picker>
 </nav-bar>
 
 
@@ -53,7 +53,7 @@ $popbot = new Popbot(get_the_ID());
                 <panel-opener icon="data_array" label="Display Inline">
                     <off-canvas header="Display Inline">
                         <div class="wrd-p">
-                            <floating-input readonly label="Shortcode" value="<?php esc_attr_e($popbot->get_shortcode()) ?>"></floating-input>
+                            <floating-input readonly label="Shortcode" value="<?php esc_attr_e($popbot->get_shortcode()); ?>"></floating-input>
 
                             <p>
                                 Add your PopBot as static features on a page.

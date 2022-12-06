@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
-import { OffCanvas } from './OffCanvas';
-import { IconButton } from './IconButton';
+import './OffCanvas';
+import './IconButton';
 
 export class PanelSelect extends LitElement {
     static properties = {

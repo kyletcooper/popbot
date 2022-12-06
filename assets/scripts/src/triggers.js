@@ -16,17 +16,19 @@ window.popbot.triggers = [
         ],
 
         setupTrigger: function (popBot, trigger_threshold) {
-            window.addEventListener("click", e => {
-                if (trigger_threshold) {
-                    // If we have a threshold selector.
-                    if (!e.target.matches(trigger_threshold) && !e.target.closest(trigger_threshold)) {
-                        // If the target and none of it's ancestors match the selector.
-                        return false;
+            window.addEventListener(
+                "click",
+                e => {
+                    if (trigger_threshold) {
+                        // If we have a threshold selector.
+                        if (!e.target.matches(trigger_threshold) && !e.target.closest(trigger_threshold)) {
+                            // If the target and none of it's ancestors match the selector.
+                            return false;
+                        }
                     }
+                    popBot.pop();
                 }
-
-                popBot.pop();
-            })
+            )
         }
     },
     {
@@ -38,11 +40,14 @@ window.popbot.triggers = [
         color: "#85A700",
 
         setupTrigger: function (popBot) {
-            document.addEventListener('mouseout', e => {
-                if (!e.toElement && !e.relatedTarget) {
-                    popBot.pop();
+            document.addEventListener(
+                'mouseout',
+                e => {
+                    if (!e.toElement && !e.relatedTarget) {
+                        popBot.pop();
+                    }
                 }
-            });
+            );
         }
     },
     {
@@ -62,16 +67,17 @@ window.popbot.triggers = [
         ],
 
         setupTrigger: function (popBot, trigger_threshold) {
-            window.addEventListener("scroll", e => {
-                const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100; // Not 100% accurate but close enough
-
-                if (trigger_threshold && scrollPercent < trigger_threshold) {
-                    // If we have a threshold percentage and it's not met
-                    return false;
+            window.addEventListener(
+                "scroll",
+                () => {
+                    const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100; // Not 100% accurate but close enough
+                    if (trigger_threshold && scrollPercent < trigger_threshold) {
+                        // If we have a threshold percentage and it's not met
+                        return false;
+                    }
+                    popBot.pop();
                 }
-
-                popBot.pop();
-            })
+            )
         }
     },
     {
@@ -90,17 +96,19 @@ window.popbot.triggers = [
         ],
 
         setupTrigger: function (popBot, trigger_threshold) {
-            window.addEventListener("submit", e => {
-                if (trigger_threshold) {
-                    // If we have a threshold selector.
-                    if (!e.submitter.matches(trigger_threshold)) {
-                        // If the target and none of it's ancestors match the selector.
-                        return false;
+            window.addEventListener(
+                "submit",
+                e => {
+                    if (trigger_threshold) {
+                        // If we have a threshold selector.
+                        if (!e.submitter.matches(trigger_threshold)) {
+                            // If the target and none of it's ancestors match the selector.
+                            return false;
+                        }
                     }
+                    popBot.pop();
                 }
-
-                popBot.pop();
-            })
+            )
         }
     },
 
@@ -138,17 +146,22 @@ window.popbot.triggers = [
             const activityEvents = ['mousedown', 'mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
             let timer;
 
-            function resetTimer(e) {
+            function resetTimer() {
                 clearTimeout(timer);
 
-                timer = setTimeout(() => {
-                    popBot.pop();
-                }, trigger_threshold * 1000) // Trigger threshold is in seconds
+                timer = setTimeout(
+                    () => {
+                        popBot.pop();
+                    },
+                    trigger_threshold * 1000
+                ) // Trigger threshold is in seconds
             }
 
-            activityEvents.forEach(function (name) {
-                document.addEventListener(name, resetTimer, true);
-            });
+            activityEvents.forEach(
+                function (name) {
+                    document.addEventListener(name, resetTimer, true);
+                }
+            );
         }
     },
     {
@@ -168,9 +181,12 @@ window.popbot.triggers = [
         ],
 
         setupTrigger: function (popBot, trigger_threshold) {
-            setTimeout(() => {
-                popBot.pop();
-            }, trigger_threshold * 1000) // Trigger threshold is in seconds
+            setTimeout(
+                () => {
+                    popBot.pop();
+                },
+                trigger_threshold * 1000
+            ) // Trigger threshold is in seconds
         }
     },
 
@@ -191,9 +207,12 @@ window.popbot.triggers = [
         ],
 
         setupTrigger: function (popBot, trigger_threshold) {
-            window.addEventListener(trigger_threshold, e => {
-                popBot.pop();
-            })
+            window.addEventListener(
+                trigger_threshold,
+                () => {
+                    popBot.pop();
+                }
+            )
         }
     },
 ];

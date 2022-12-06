@@ -4,6 +4,7 @@ namespace popbot;
 
 class Custom_Condition
 {
+
     const POST_TYPE = 'popbot_condition';
 
     private int $post_id;
@@ -12,16 +13,16 @@ class Custom_Condition
     public function __construct(int $post_id)
     {
         $this->post_id = $post_id;
-        $this->_update_internal_post();
+        $this->update_internal_post();
     }
 
-    private function _update_internal_post()
+    private function update_internal_post()
     {
-        static::_set_blog();
+        static::set_blog();
 
         $this->post = get_post($this->post_id);
 
-        static::_reset_blog();
+        static::reset_blog();
     }
 
     public function get_id(): int
@@ -36,16 +37,18 @@ class Custom_Condition
 
     public function set_title(string $title): bool
     {
-        static::_set_blog();
+        static::set_blog();
 
-        $id = wp_update_post([
-            "ID" => $this->get_id(),
-            "post_title" => $title
-        ]);
+        $id = wp_update_post(
+            array(
+                'ID'         => $this->get_id(),
+                'post_title' => $title,
+            )
+        );
 
-        static::_reset_blog();
+        static::reset_blog();
 
-        $this->_update_internal_post();
+        $this->update_internal_post();
         return $id > 0;
     }
 
@@ -56,16 +59,18 @@ class Custom_Condition
 
     public function set_callback(string $callback): bool
     {
-        static::_set_blog();
+        static::set_blog();
 
-        $id = wp_update_post([
-            "ID" => $this->get_id(),
-            "post_content" => $callback
-        ]);
+        $id = wp_update_post(
+            array(
+                'ID'           => $this->get_id(),
+                'post_content' => $callback,
+            )
+        );
 
-        static::_reset_blog();
+        static::reset_blog();
 
-        $this->_update_internal_post();
+        $this->update_internal_post();
         return $id > 0;
     }
 
@@ -74,14 +79,14 @@ class Custom_Condition
         return (bool) wp_delete_post($this->post_id);
     }
 
-    private static function _set_blog()
+    private static function set_blog()
     {
         if (is_multisite()) {
             switch_to_blog(get_main_site_id());
         }
     }
 
-    private static function _reset_blog()
+    private static function reset_blog()
     {
         if (is_multisite()) {
             restore_current_blog();
@@ -90,58 +95,65 @@ class Custom_Condition
 
     public static function init()
     {
-        add_action('init', [static::class, 'register_post_type']);
+        add_action('init', array(static::class, 'register_post_type'));
     }
 
     public static function register_post_type()
     {
-        register_post_type(static::POST_TYPE, [
-            'label'                 => __('Custom Conditions', 'popbot'),
-            'supports'              => ['title', 'editor', 'revisions'],
-            'public'                => false,
-            'can_export'            => true,
-            'has_archive'           => false,
-            'show_in_rest'          => true,
-        ]);
+        register_post_type(
+            static::POST_TYPE,
+            array(
+                'label'        => __('Custom Conditions', 'popbot'),
+                'supports'     => array('title', 'editor', 'revisions'),
+                'public'       => false,
+                'can_export'   => true,
+                'has_archive'  => false,
+                'show_in_rest' => true,
+            )
+        );
     }
 
-    public static function create(array $args = [])
+    public static function create(array $args = array())
     {
-        static::_set_blog();
+        static::set_blog();
 
-        $args = array_merge([
-            'title' => 'Untitled Custom Condition',
-            'callback' => 'return 1;',
-        ]);
+        $args = array_merge(
+            array(
+                'title'    => 'Untitled Custom Condition',
+                'callback' => 'return 1;',
+            )
+        );
 
-        $post_id = wp_insert_post([
-            'post_title' => $args['title'],
-            'post_name' => sanitize_title($args['title']),
-            'post_content' => $args['callback'],
-            'post_type' => static::POST_TYPE,
-            'post_status' => 'publish',
-        ]);
+        $post_id = wp_insert_post(
+            array(
+                'post_title'   => $args['title'],
+                'post_name'    => sanitize_title($args['title']),
+                'post_content' => $args['callback'],
+                'post_type'    => static::POST_TYPE,
+                'post_status'  => 'publish',
+            )
+        );
 
         $condition = new Custom_Condition($post_id);
 
-        static::_reset_blog();
+        static::reset_blog();
         return $condition;
     }
 
-    public static function query(array $args = [])
+    public static function query(array $args = array())
     {
-        static::_set_blog();
+        static::set_blog();
 
-        $default_args = [
+        $default_args = array(
             'per_page' => -1,
-            'page' => 1,
-        ];
+            'page'     => 1,
+        );
 
-        $forced_args = [
-            'post_type' => static::POST_TYPE,
-            'post_status' => 'any',
+        $forced_args = array(
+            'post_type'           => static::POST_TYPE,
+            'post_status'         => 'any',
             'ignore_sticky_posts' => true,
-        ];
+        );
 
         $args = array_merge($default_args, $args, $forced_args);
 
@@ -154,14 +166,14 @@ class Custom_Condition
             unset($args['page']);
         }
 
-        $posts = get_posts($args);
-        $conditions = [];
+        $posts      = get_posts($args);
+        $conditions = array();
 
         foreach ($posts as $post) {
             $conditions[] = new Custom_Condition($post->ID);
         }
 
-        static::_reset_blog();
+        static::reset_blog();
         return $conditions;
     }
 }

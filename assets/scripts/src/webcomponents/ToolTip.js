@@ -118,7 +118,7 @@ export class ToolTip extends LitElement {
         }
     }
 
-    _onEnd(e) {
+    _onEnd() {
         this._hidden = true;
     }
 

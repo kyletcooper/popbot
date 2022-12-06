@@ -1,13 +1,13 @@
-import { LitElement, css, html } from 'lit';
+import { css, html } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import { api } from '../utils';
 import { PanelInterface } from './PanelInterface';
-import { OffCanvas } from './OffCanvas';
-import { PanelSelect } from './PanelSelect';
-import { IconButton } from './IconButton';
-import { PartialTemplate } from './PartialTemplate';
-import { ToolTip } from './ToolTip';
-import { IconLabel } from './IconLabel';
+import './OffCanvas';
+import './PanelSelect';
+import './IconButton';
+import './PartialTemplate';
+import './ToolTip';
+import './IconLabel';
 
 export class PanelAppearance extends PanelInterface {
     static properties = {

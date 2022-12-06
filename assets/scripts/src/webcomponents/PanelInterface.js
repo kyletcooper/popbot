@@ -90,7 +90,7 @@ export class PanelInterface extends LitElement {
         return !shallowEqual(this._savedState, this.value);
     }
 
-    _onOpen(e) {
+    _onOpen() {
         this._saveState();
     }
 

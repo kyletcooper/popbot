@@ -93,7 +93,7 @@ export class ConditionRule extends LitElement {
 
         return html`
             <div class="row">
-                <select name="condition" @input="${() => { this._onUpdateValue("condition") }}" @focus="${e => this.requestUpdate()}">
+                <select name="condition" @input="${() => { this._onUpdateValue("condition") }}" @focus="${() => this.requestUpdate()}">
                     <option disabled selected hidden>Select a Condition</option>
                     ${renderOptGroups(categorisedConditions, this.condition)}
                 </select>

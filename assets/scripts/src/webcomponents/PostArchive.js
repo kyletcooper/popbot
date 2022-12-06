@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
-import { PartialBot } from './PartialBot';
+import './PartialBot';
 
 export class PostArchive extends LitElement {
     static properties = {

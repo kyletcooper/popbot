@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { map } from 'lit/directives/map.js';
 import { api } from '../utils';
-import { PartialTemplate } from './PartialTemplate';
+import './PartialTemplate';
 
 export class TemplatePicker extends LitElement {
     static properties = {

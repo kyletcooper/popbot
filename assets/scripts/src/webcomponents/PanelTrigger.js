@@ -1,8 +1,8 @@
-import { LitElement, css, html } from 'lit';
+import { css, html } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import { categorise } from '../utils';
 import { PanelInterface } from './PanelInterface';
-import { FloatingInput } from './FloatingInput';
+import './FloatingInput';
 
 
 export class PanelTrigger extends PanelInterface {

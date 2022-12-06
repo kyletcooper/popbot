@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { css, html } from 'lit';
 import { PanelInterface } from './PanelInterface.js';
 import { api, setupCustomConditions } from '../utils';
 import { toast } from './SnackBar';

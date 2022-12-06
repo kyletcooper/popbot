@@ -1,35 +1,35 @@
 .pb-welcomemat{
-    position: fixed;
-    inset: 0;
-    min-width: 80vw;
-    min-height: 80vh;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background-repeat: no-repeat;
+	position: fixed;
+	inset: 0;
+	min-width: 80vw;
+	min-height: 80vh;
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	background-repeat: no-repeat;
 }
 .pb-welcomemat__align-left{
-    justify-content: start;
-    padding: 2rem max(10vw, 2rem);
+	justify-content: start;
+	padding: 2rem max(10vw, 2rem);
 }
 .pb-welcomemat__align-right{
-    justify-content: end;
-    padding: 2rem max(10vw, 2rem);
+	justify-content: end;
+	padding: 2rem max(10vw, 2rem);
 }
 
 .pb-welcomemat-close{
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    fill: currentColor;
-    transition: opacity 0.2s ease;
-    cursor: pointer;
+	position: absolute;
+	top: 2rem;
+	right: 2rem;
+	fill: currentColor;
+	transition: opacity 0.2s ease;
+	cursor: pointer;
 }
 .pb-welcomemat-close:hover,
 .pb-welcomemat-close:focus{
-    opacity: 0.8;
+	opacity: 0.8;
 }
 
 .pb-welcomemat-content p,
@@ -39,24 +39,24 @@
 .pb-welcomemat-content h4,
 .pb-welcomemat-content h5,
 .pb-welcomemat-content h6{
-    max-width: 60ch;
+	max-width: 60ch;
 }
 
 .entering .pb-welcomemat{
-    animation: pb-welcomeat-enter 0.2s ease;
+	animation: pb-welcomeat-enter 0.2s ease;
 }
 .leaving .pb-welcomemat{
-    animation: pb-welcomeat-leave 0.2s ease forwards;
+	animation: pb-welcomeat-leave 0.2s ease forwards;
 }
 @keyframes pb-welcomeat-enter{
-    from{
-        transform: scale(1.1);
-        opacity: 0;
-    }
+	from{
+		transform: scale(1.1);
+		opacity: 0;
+	}
 }
 @keyframes pb-welcomeat-leave{
-    to{
-        transform: scale(1.1);
-        opacity: 0;
-    }
+	to{
+		transform: scale(1.1);
+		opacity: 0;
+	}
 }

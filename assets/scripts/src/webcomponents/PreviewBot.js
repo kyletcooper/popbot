@@ -20,7 +20,7 @@ export class PreviewBot extends LitElement {
         this.scale = 1;
         this.errors = [];
 
-        document.addEventListener("panel-interface-saved", e => {
+        document.addEventListener("panel-interface-saved", () => {
             this.refreshPreview();
             this.refreshErrors();
         });
