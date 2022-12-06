@@ -47,7 +47,7 @@ class User_Journey_Monitor
         // LAST FOR SESSION ONLY
         // Referrer
         if (isset($_SERVER['HTTP_REFERER'])) {
-            setcookie('popBot_journey_referrer', $_SERVER['HTTP_REFERER'], 0, '/');
+            setcookie('popBot_journey_referrer', esc_url($_SERVER['HTTP_REFERER']), 0, '/');
         } else if (!isset($_COOKIE['popBot_journey_referrer'])) {
             setcookie('popBot_journey_referrer', '', 0, '/');
         }
@@ -67,7 +67,7 @@ class User_Journey_Monitor
         }
 
         // Page Count
-        $pagesVisited = $_COOKIE['popBot_journey_pageCount'] ?? 0;
+        $pagesVisited = intval($_COOKIE['popBot_journey_pageCount'] ?? 0);
         setcookie('popBot_journey_pageCount', intval($pagesVisited) + 1, 0, '/');
     }
 }
