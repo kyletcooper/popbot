@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Template for displaying a PopBot.
+ */
+
 $profile_photo_id  = popbot_setting( 'profile-photo' );
 $profile_photo_url = wp_get_attachment_image_url( $profile_photo_id, 'medium' );
 
@@ -16,5 +20,5 @@ if ( ! $profile_photo_url ) {
 		<?php the_content(); ?>
 	</div>
 
-	<img class="pb-chatbox-sender" src="<?php esc_attr_e( $profile_photo_url ); ?>" />
+	<img class="pb-chatbox-sender" src="<?php echo esc_url( $profile_photo_url ); ?>" />
 </div>

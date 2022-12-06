@@ -1,179 +1,173 @@
 <?php
 
+/**
+ * Contains the Custom_Condtion class.
+ */
+
 namespace popbot;
 
-class Custom_Condition
-{
+/**
+ * Manages a Custom Condition post type.
+ */
+class Custom_Condition {
 
-    const POST_TYPE = 'popbot_condition';
 
-    private int $post_id;
-    private \WP_Post $post;
 
-    public function __construct(int $post_id)
-    {
-        $this->post_id = $post_id;
-        $this->update_internal_post();
-    }
+	const POST_TYPE = 'popbot_condition';
 
-    private function update_internal_post()
-    {
-        static::set_blog();
+	private int $post_id;
+	private \WP_Post $post;
 
-        $this->post = get_post($this->post_id);
+	public function __construct( int $post_id ) {
+		$this->post_id = $post_id;
+		$this->update_internal_post();
+	}
 
-        static::reset_blog();
-    }
+	private function update_internal_post() {
+		static::set_blog();
 
-    public function get_id(): int
-    {
-        return $this->post_id;
-    }
+		$this->post = get_post( $this->post_id );
 
-    public function get_title(): string
-    {
-        return $this->post->post_title;
-    }
+		static::reset_blog();
+	}
 
-    public function set_title(string $title): bool
-    {
-        static::set_blog();
+	public function get_id(): int {
+		return $this->post_id;
+	}
 
-        $id = wp_update_post(
-            array(
-                'ID'         => $this->get_id(),
-                'post_title' => $title,
-            )
-        );
+	public function get_title(): string {
+		return $this->post->post_title;
+	}
 
-        static::reset_blog();
+	public function set_title( string $title ): bool {
+		static::set_blog();
 
-        $this->update_internal_post();
-        return $id > 0;
-    }
+		$id = wp_update_post(
+			array(
+				'ID'         => $this->get_id(),
+				'post_title' => $title,
+			)
+		);
 
-    public function get_callback(): string
-    {
-        return $this->post->post_content;
-    }
+		static::reset_blog();
 
-    public function set_callback(string $callback): bool
-    {
-        static::set_blog();
+		$this->update_internal_post();
+		return $id > 0;
+	}
 
-        $id = wp_update_post(
-            array(
-                'ID'           => $this->get_id(),
-                'post_content' => $callback,
-            )
-        );
+	public function get_callback(): string {
+		return $this->post->post_content;
+	}
 
-        static::reset_blog();
+	public function set_callback( string $callback ): bool {
+		static::set_blog();
 
-        $this->update_internal_post();
-        return $id > 0;
-    }
+		$id = wp_update_post(
+			array(
+				'ID'           => $this->get_id(),
+				'post_content' => $callback,
+			)
+		);
 
-    public function delete(): bool
-    {
-        return (bool) wp_delete_post($this->post_id);
-    }
+		static::reset_blog();
 
-    private static function set_blog()
-    {
-        if (is_multisite()) {
-            switch_to_blog(get_main_site_id());
-        }
-    }
+		$this->update_internal_post();
+		return $id > 0;
+	}
 
-    private static function reset_blog()
-    {
-        if (is_multisite()) {
-            restore_current_blog();
-        }
-    }
+	public function delete(): bool {
+		return (bool) wp_delete_post( $this->post_id );
+	}
 
-    public static function init()
-    {
-        add_action('init', array(static::class, 'register_post_type'));
-    }
+	private static function set_blog() {
+		if ( is_multisite() ) {
+			switch_to_blog( get_main_site_id() );
+		}
+	}
 
-    public static function register_post_type()
-    {
-        register_post_type(
-            static::POST_TYPE,
-            array(
-                'label'        => __('Custom Conditions', 'popbot'),
-                'supports'     => array('title', 'editor', 'revisions'),
-                'public'       => false,
-                'can_export'   => true,
-                'has_archive'  => false,
-                'show_in_rest' => true,
-            )
-        );
-    }
+	private static function reset_blog() {
+		if ( is_multisite() ) {
+			restore_current_blog();
+		}
+	}
 
-    public static function create(array $args = array())
-    {
-        static::set_blog();
+	public static function init() {
+		add_action( 'init', array( static::class, 'register_post_type' ) );
+	}
 
-        $args = array_merge(
-            array(
-                'title'    => 'Untitled Custom Condition',
-                'callback' => 'return 1;',
-            )
-        );
+	public static function register_post_type() {
+		register_post_type(
+			static::POST_TYPE,
+			array(
+				'label'        => __( 'Custom Conditions', 'popbot' ),
+				'supports'     => array( 'title', 'editor', 'revisions' ),
+				'public'       => false,
+				'can_export'   => true,
+				'has_archive'  => false,
+				'show_in_rest' => true,
+			)
+		);
+	}
 
-        $post_id = wp_insert_post(
-            array(
-                'post_title'   => $args['title'],
-                'post_name'    => sanitize_title($args['title']),
-                'post_content' => $args['callback'],
-                'post_type'    => static::POST_TYPE,
-                'post_status'  => 'publish',
-            )
-        );
+	public static function create( array $args = array() ) {
+		static::set_blog();
 
-        $condition = new Custom_Condition($post_id);
+		$args = array_merge(
+			array(
+				'title'    => 'Untitled Custom Condition',
+				'callback' => 'return 1;',
+			)
+		);
 
-        static::reset_blog();
-        return $condition;
-    }
+		$post_id = wp_insert_post(
+			array(
+				'post_title'   => $args['title'],
+				'post_name'    => sanitize_title( $args['title'] ),
+				'post_content' => $args['callback'],
+				'post_type'    => static::POST_TYPE,
+				'post_status'  => 'publish',
+			)
+		);
 
-    public static function query(array $args = array())
-    {
-        static::set_blog();
+		$condition = new Custom_Condition( $post_id );
 
-        $default_args = array(
-            'per_page' => -1,
-            'page'     => 1,
-        );
+		static::reset_blog();
+		return $condition;
+	}
 
-        $forced_args = array(
-            'post_type'           => static::POST_TYPE,
-            'post_status'         => 'any',
-            'ignore_sticky_posts' => true,
-        );
+	public static function query( array $args = array() ) {
+		static::set_blog();
 
-        $args = array_merge($default_args, $args, $forced_args);
+		$default_args = array(
+			'per_page' => -1,
+			'page'     => 1,
+		);
 
-        if ($args['per_page']) {
-            $args['posts_per_page'] = $args['per_page'];
-        }
+		$forced_args = array(
+			'post_type'           => static::POST_TYPE,
+			'post_status'         => 'any',
+			'ignore_sticky_posts' => true,
+		);
 
-        if ($args['page']) {
-            $args['paged'] = $args['page'];
-            unset($args['page']);
-        }
+		$args = array_merge( $default_args, $args, $forced_args );
 
-        $posts      = get_posts($args);
-        $conditions = array();
+		if ( $args['per_page'] ) {
+			$args['posts_per_page'] = $args['per_page'];
+		}
 
-        foreach ($posts as $post) {
-            $conditions[] = new Custom_Condition($post->ID);
-        }
+		if ( $args['page'] ) {
+			$args['paged'] = $args['page'];
+			unset( $args['page'] );
+		}
 
-        static::reset_blog();
-        return $conditions;
-    }
+		$posts      = get_posts( $args );
+		$conditions = array();
+
+		foreach ( $posts as $post ) {
+			$conditions[] = new Custom_Condition( $post->ID );
+		}
+
+		static::reset_blog();
+		return $conditions;
+	}
 }

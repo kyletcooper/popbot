@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * REST API Route for PopBot Options.
+ */
+
 namespace popbot;
 
 class Custom_Route_Popbot_Options {
+
 
 	public function register_routes() {
 		$version   = 1;

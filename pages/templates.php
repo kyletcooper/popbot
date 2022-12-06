@@ -1,8 +1,10 @@
 <?php
 
-namespace popbot;
+/**
+ * Shows all the PopBot templates.
+ */
 
-$categoriesCustom = Popbot_Template::get_all( 'uploads' );
+namespace popbot;
 
 ?>
 

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Registers the metabox settings for this PopBot template.
+ */
+
 register_popbot_setting(
 	array(
 		'slug' => 'profile-photo',

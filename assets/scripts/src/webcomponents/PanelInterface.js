@@ -100,7 +100,7 @@ export class PanelInterface extends LitElement {
 
             const resp = modal("You have unsaved changes!", "Leaving now will revert all the changes you've made. Are you sure you don't want to save?", "Go Back", "Discard Changes");
             resp.then(
-                () => { /* Don't close! */ },
+                () => { console.log("Discard!"); /* Don't close! */ },
                 () => { this.discard(); this.close(); }
             )
         }

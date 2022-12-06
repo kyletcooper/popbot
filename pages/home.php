@@ -1,10 +1,14 @@
 <?php
 
+/**
+ * The main dashboard template for PopBots.
+ */
+
 namespace popbot;
 
 ?>
 
-<header id="hero" class="wrd-hero" style="background-image: url('<?php esc_attr_e( Popbot_Plugin::PLUGIN_URL . '/assets/images/bg.png' ); ?>')">
+<header id="hero" class="wrd-hero" style="background-image: url('<?php echo esc_attr( Popbot_Plugin::PLUGIN_URL . '/assets/images/bg.png' ); ?>')">
 	<div class="wrd-container">
 		<div class="wrd-p">
 			<h1>PopBot</h1>
@@ -46,7 +50,7 @@ namespace popbot;
 						<?php foreach ( $bots as $bot ) : ?>
 
 							<div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
-								<partial-bot uuid="<?php esc_attr_e( $bot->get_uuid() ); ?>"></partial-bot>
+								<partial-bot uuid="<?php echo esc_attr( $bot->get_uuid() ); ?>"></partial-bot>
 							</div>
 
 						<?php endforeach; ?>
@@ -59,7 +63,7 @@ namespace popbot;
 								You haven't created any PopBots
 							</h3>
 
-							<a href="<?php esc_attr_e( Admin_Page::get( 'popbot-templates' )->get_link() ); ?>" class="wrd-button" style="margin-bottom: 0;">
+							<a href="<?php echo esc_attr( Admin_Page::get( 'popbot-templates' )->get_link() ); ?>" class="wrd-button" style="margin-bottom: 0;">
 								<icon-label icon="add_circle" label="Create your First PopBot"></icon-label>
 								<icon-label icon="arrow_forward"></icon-label>
 							</a>
@@ -99,14 +103,14 @@ namespace popbot;
 
 				<div class="wrd-row">
 					<div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
-						<a class="wrd-button" style="width: 100%" href="<?php esc_attr_e( Admin_Page::get( 'popbot-templates' )->get_link() ); ?>">
+						<a class="wrd-button" style="width: 100%" href="<?php echo esc_attr( Admin_Page::get( 'popbot-templates' )->get_link() ); ?>">
 							<icon-label icon="add_circle" label="Create new PopBot"></icon-label>
 							<icon-label icon="arrow_forward"></icon-label>
 						</a>
 					</div>
 
 					<div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
-						<a class="wrd-button" style="width: 100%" href="<?php esc_attr_e( Admin_Page::get( 'popbot-archive' )->get_link() ); ?>">
+						<a class="wrd-button" style="width: 100%" href="<?php echo esc_attr( Admin_Page::get( 'popbot-archive' )->get_link() ); ?>">
 							<icon-label icon="apps" label="View all PopBots"></icon-label>
 							<icon-label icon="arrow_forward"></icon-label>
 						</a>
@@ -133,7 +137,7 @@ namespace popbot;
 						<?php foreach ( array( 'shown', 'converted', 'dismissed' ) as $event_type ) : ?>
 
 							<div class="wrd-col-12 wrd-col-md-6 wrd-col-lg-4">
-								<stat-scorecard event_type="<?php esc_attr_e( $event_type ); ?>"></stat-scorecard>
+								<stat-scorecard event_type="<?php echo esc_attr( $event_type ); ?>"></stat-scorecard>
 							</div>
 
 						<?php endforeach; ?>

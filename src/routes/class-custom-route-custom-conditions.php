@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * REST API Route for Custom Conditions.
+ */
+
 namespace popbot;
 
 class Custom_Route_Custom_Conditions {
+
 
 	public function register_routes() {
 		$version   = 1;

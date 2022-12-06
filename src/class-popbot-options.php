@@ -1,8 +1,16 @@
 <?php
 
+/**
+ * Contains the Popbot_Options class.
+ */
+
 namespace popbot;
 
+/**
+ * Handles setting & getting the options for PopBot, which are whitelisted.
+ */
 class Popbot_Options {
+
 
 	const OPTIONS_WHITELIST = array(
 		'popbot_version'                     => false,

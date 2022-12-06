@@ -1,7 +1,14 @@
-<div class="pb-welcomemat pb-welcomemat__align-<?php the_popbot_setting( 'align-content', 'center' ); ?>"
-style="
+<?php
+
+/**
+ * Template for displaying a PopBot.
+ */
+
+?>
+
+<div class="pb-welcomemat pb-welcomemat__align-<?php the_popbot_setting( 'align-content', 'center' ); ?>" style="
 	background-color: <?php the_popbot_setting( 'background-color', '#ffffff' ); ?>;
-	background-image: url('<?php esc_attr_e( wp_get_attachment_image_url( popbot_setting( 'background-image', '' ), 'full' ) ); ?>');
+	background-image: url('<?php echo esc_url( wp_get_attachment_image_url( popbot_setting( 'background-image', '' ), 'full' ) ); ?>');
 	background-size: <?php the_popbot_setting( 'background-size', 'cover' ); ?>;
 	background-position: <?php the_popbot_setting( 'background-position', 'bottom center' ); ?>;
 ">

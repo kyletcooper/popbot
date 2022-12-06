@@ -1,13 +1,17 @@
 <?php
 
+/**
+ * Template for displaying all the PopBots.
+ */
+
 namespace popbot;
 
 ?>
 
 
-<nav-bar label="<?php _e( 'All Popbots', 'popbot' ); ?>" back>
-	<tool-tip label="<?php _e( 'Create new Popbot', 'popbot' ); ?>">
-		<a href="<?php echo esc_url( Admin_Page::get( 'popbot-templates' )->get_link() ); ?>" aria-label="<?php _e( 'Create new Popbot', 'popbot' ); ?>">
+<nav-bar label="<?php esc_attr_e( 'All Popbots', 'popbot' ); ?>" back>
+	<tool-tip label="<?php esc_attr_e( 'Create new Popbot', 'popbot' ); ?>">
+		<a href="<?php echo esc_url( Admin_Page::get( 'popbot-templates' )->get_link() ); ?>" aria-label="<?php esc_attr_e( 'Create new Popbot', 'popbot' ); ?>">
 			<icon-label button icon="add"></icon-label>
 		</a>
 	</tool-tip>
