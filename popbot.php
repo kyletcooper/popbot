@@ -9,7 +9,7 @@ namespace popbot;
  * Requires at least: 5.7
  * Requires PHP:      7.4.0
  * Author:            Web Results Direct
- * Author URI:        https://wrd.studio.com/
+ * Author URI:        https://wrd.studio
  * License:           GPL v3 or later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       popbot
