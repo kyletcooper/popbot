@@ -1,4 +1,4 @@
-=== PopBot ===
+=== PopBot - Create targeted pop-ups to convert your visitors ===
 Contributors: wrdstudio
 Tags: pop-up, popup, conversion, cro, chatbox, modal, dialog, goals, conversion rate, conversion rate optimisation, triggers, conditions
 Requires at least: 5.7
