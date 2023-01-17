@@ -5,7 +5,7 @@ namespace popbot;
 /**
  * Plugin Name:       PopBot
  * Description:       Convert your users with targeted pop-ups. Use triggers & rules to nudge your users towards conversions when they're ready using the perfect pop-up.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 5.7
  * Requires PHP:      7.4.0
  * Author:            Web Results Direct
@@ -21,7 +21,7 @@ class Popbot_Plugin {
 
 
 	const PLUGIN_FILE = __FILE__;
-	const VERSION     = '1.0.1';
+	const VERSION     = '1.0.3';
 	const PLUGIN_DIR  = WP_PLUGIN_DIR . '/popbot';
 	const PLUGIN_URL  = WP_PLUGIN_URL . '/popbot';
 	const CONTENT_DIR = WP_CONTENT_DIR . '/popbot';
