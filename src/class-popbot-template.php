@@ -208,6 +208,10 @@ class Popbot_Template {
 				continue;
 			}
 
+			if ( ! file_exists( $areas['dir'] ) ) {
+				continue;
+			}
+
 			$files = array_diff( scandir( $areas['dir'] ), array( '..', '.' ) );
 
 			foreach ( $files as $file_name ) {
