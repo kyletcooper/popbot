@@ -149,141 +149,141 @@ class pobBotDebugger {
         let styles = document.createElement("style");
 
         styles.innerHTML = `
-			@import url( 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap' );
+        @import url( 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap' );
 
-			.popbot - debugger{
-				position: fixed;
-				bottom: 2rem;
-				left: 2rem;
-				z - index: 999;
+        .popbot-debugger{
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 999;
 
-				width: 50ch;
-				max - width: 75vw;
+            width: 50ch;
+            max-width: 75vw;
 
-				background: #fff;
-				border: #e2e8f0 solid 1px;
-				border - radius: 0.4rem;
-				box - shadow: 0.5rem 0.5rem 1.5rem rgb( 0 0 0 / 10 % );
+            background: #fff;
+            border: #e2e8f0 solid 1px;
+            border-radius: 0.4rem;
+            box-shadow: 0.5rem 0.5rem 1.5rem rgb( 0 0 0 / 10 % );
 
-				font - family: "Poppins", Poppins;
-				font - weight: 400;
+            font-family: "Poppins", Poppins;
+            font-weight: 400;
 		}
 
-			.popbot - debugger - header{
-				display: flex;
-				align - items: center;
-				gap: 0.5rem;
-				padding: 0.75rem 1.5rem;
-				padding - left: 0.5rem;
+        .popbot-debugger-header{
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            padding-left: 0.5rem;
 
-				border - bottom: #e2e8f0 solid 1px;
+            border-bottom: #e2e8f0 solid 1px;
 		}
-			.popbot - debugger - close{
-				border: none;
+        .popbot-debugger-close{
+            border: none;
 
-				width: 3rem;
-				height: 3rem;
+            width: 3rem;
+            height: 3rem;
 
-				font - size: 2rem;
+            font-size: 2rem;
 
-				display: flex;
-				align - items: center;
-				justify - content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-				background: transparent;
-				border - radius: 100 %;
+            background: transparent;
+            border-radius: 100 %;
 
-				cursor: pointer;
+            cursor: pointer;
 		}
-			.popbot - debugger - close:hover{
-				background: #eee;
+        .popbot-debugger-close:hover{
+            background: #eee;
 		}
-			.popbot - debugger - title{
-				padding: 0;
-				margin: 0;
+        .popbot-debugger-title{
+            padding: 0;
+            margin: 0;
 
-				font - size: 1.3rem;
-				font - weight: 500;
-				font - family: inherit;
-		}
-
-			.popbot - debugger - body{
-				padding: 1.5rem;
-
-				display: grid;
-				gap: 1.5rem;
-
-				max - height: 70vh;
-				overflow - y: auto;
+            font-size: 1.3rem;
+            font-weight: 500;
+            font-family: inherit;
 		}
 
-			.popbot - debugger - bot{
-		}
-			.popbot - debugger - bot - name{
-				font - family: inherit;
-				font - size: 1.2rem;
-				font - weight: 500;
+        .popbot-debugger-body{
+            padding: 1.5rem;
 
-				margin: 0;
-		}
-			.popbot - debugger - bot - cause{
-				display: flex;
-				align - items: center;
-				gap: 1rem;
-		}
-			.popbot - debugger - bot - icon{
-				font - size: 1rem;
+            display: grid;
+            gap: 1.5rem;
 
-				padding: 0.5rem;
-
-				display: flex;
-				align - items: center;
-				justify - content: center;
-
-				border - radius: 100 %;
-
-				color: #be123c;
-				background: #ffe4e6;
-		}
-			.popbot - debugger - bot - icon svg{
-				fill: currentColor;
-		}
-			.popbot - debugger - bot - msg{
-				color: #64748b;
-		}
-			.popbot - debugger - footer{
-				display: flex;
-				gap: 1rem;
-				padding: 0.75rem 1.5rem;
-
-				border - top: #e2e8f0 solid 1px;
+            max-height: 70vh;
+            overflow-y: auto;
 		}
 
-			.popbot - debugger - btn{
-				padding: 0.4rem 0.8rem;
-
-				background: #D204B0;
-				color: white;
-
-				border: none;
-				border - radius: 0.2rem;
-
-				cursor: pointer;
-
-				font - size: 0.9rem;
-				font - weight: inherit;
-				font - family: inherit;
-
-				transition: background 0.2s ease;
+        .popbot-debugger-bot{
 		}
-			.popbot - debugger - btn:hover,
-			.popbot - debugger - btn:focus{
-				background: #8E0076;
+        .popbot-debugger-bot-name{
+            font-family: inherit;
+            font-size: 1.2rem;
+            font-weight: 500;
+
+            margin: 0;
+		}
+        .popbot-debugger-bot-cause{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+		}
+        .popbot-debugger-bot-icon{
+            font-size: 1rem;
+
+            padding: 0.5rem;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 100 %;
+
+            color: #be123c;
+            background: #ffe4e6;
+		}
+        .popbot-debugger-bot-icon svg{
+            fill: currentColor;
+		}
+        .popbot-debugger-bot-msg{
+            color: #64748b;
+		}
+        .popbot-debugger-footer{
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+
+            border-top: #e2e8f0 solid 1px;
 		}
 
-			.popbot - debugger - bot__success .popbot - debugger - bot - icon{
-				background: #d1fae5;
-				color: #047857;
+        .popbot-debugger-btn{
+            padding: 0.4rem 0.8rem;
+
+            background: #D204B0;
+            color: white;
+
+            border: none;
+            border-radius: 0.2rem;
+
+            cursor: pointer;
+
+            font-size: 0.9rem;
+            font-weight: inherit;
+            font-family: inherit;
+
+            transition: background 0.2s ease;
+		}
+        .popbot-debugger-btn:hover,
+        .popbot-debugger-btn:focus{
+            background: #8E0076;
+		}
+
+        .popbot-debugger-bot__success .popbot-debugger-bot-icon{
+            background: #d1fae5;
+            color: #047857;
 		}
 		`;
 
@@ -329,7 +329,7 @@ class pobBotDebugger {
     }
 
     getBotElement(bot_id) {
-        return this.element.querySelector(`[data - popbot - id = "${bot_id}"]`);
+        return this.element.querySelector(`[data-popbot-id="${bot_id}"]`);
     }
 
     clearCookies(e) {
