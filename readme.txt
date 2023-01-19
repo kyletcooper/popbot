@@ -66,5 +66,13 @@ Gears Photo by [Pavel Neznanov](https://unsplash.com/@npi). Licensed from [Unspl
 Material Icons by Google. Licensed under the [Apache License Version 2](https://www.apache.org/licenses/LICENSE-2.0.html).
 Poppins Designed by Indian Type Foundry, Jonny Pinhorn. Licensed under the [Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL).
 
-= 1.0 =
+= 1.0.3 =
+* Fixed bug with Templates endpoint.
+
+= 1.0.2 =
+
+= 1.0.1 =
+* Updated readme.txt
+
+= 1.0.0 =
 * First Version
